@@ -17,7 +17,7 @@ const Home = () => {
         try{
           const response = await axios.get(`${apiUrl}/backend/devicelast_datas`);
         //   setDeviceNames(response.data);
-          console.log(response)
+        //   console.log(response)
 
         }catch(error){
           console.error("Error fetching data:",error);
