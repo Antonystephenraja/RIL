@@ -1,6 +1,8 @@
 import React from 'react'
 import {Navigate, Outlet} from 'react-router-dom'
 import Navbar from '../Compoents/Navbar';
+import bgImage from '../Assets/bg.png';
+
 const Protected_Route = () => {
     const token = localStorage.getItem('token')
     const isValidToken = () => {
@@ -8,7 +10,7 @@ const Protected_Route = () => {
       };
     return isValidToken() ?(
     <> 
-        <div className='h-[100vh] bg-black p-2'>
+        <div className='h-[1200px] md:h-[100vh] bg-cover bg-center p-2' style={{backgroundImage:`url(${bgImage})`}}>
             <div className='h-[7%]'>
                 <Navbar/>
             </div>
