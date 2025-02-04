@@ -14,6 +14,7 @@ export const AlldataProvider =({children})=>{
         try {
         const response = await axios.get(`${apiUrl}/backend/DataCollection?limit=${limit}`);
         setData(response.data);
+    
         const Response_data = response?response.data:[]
         if(Response_data.error == "No Data Found"){
             setTerminalOutput((prev) => [

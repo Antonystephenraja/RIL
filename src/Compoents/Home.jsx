@@ -71,13 +71,11 @@ const Home = () => {
     (parseInt(Sensor_Limits.MinLimit) > parseInt(Active_Last_Value.Sensor3)) && `Sensor3 has exceeded the minimum Temperature at  ${Active_Last_Value.Time}.`,
     (parseInt(Sensor_Limits.MaxLimit) < parseInt(Active_Last_Value.Sensor3)) && `Sensor3 has exceeded the maximum Temperature at  ${Active_Last_Value.Time}.`,
 
-    (parseInt(Sensor_Limits.MinLimit) > parseInt(Active_Last_Value.Sensor4)) && `Sensor4 has exceeded the minimum Temperature at  ${Active_Last_Value.Time}.`,
-    (parseInt(Sensor_Limits.MaxLimit) < parseInt(Active_Last_Value.Sensor4)) && `Sensor4 has exceeded the maximum Temperature at  ${Active_Last_Value.Time}.`,
 
   ].filter(Boolean);
   const data = {
     labels: [...Timestamp].reverse(), 
-    datasets: [Sensor1, Sensor2, Sensor3, Sensor4].map((sensorData, index) => ({
+    datasets: [Sensor1, Sensor2, Sensor3].map((sensorData, index) => ({
       label: `Sensor ${index + 1}`,
       data: [...sensorData].reverse(),
       borderColor: colors[index].bg,
@@ -241,12 +239,10 @@ const options = useMemo(() => {
         console.log("Both values are empty");
         return;
       }
-
       const payload = {};
       if (Minvalue) payload.Minvalue = Minvalue;
       if (MaxValue) payload.MaxValue = MaxValue;
       const id = Minvalue && MaxValue ? 3 : Minvalue ? 1 : 2;
-
       const res = await fetch(`${apiUrl}/backend/InserLimit`, {
         method: "POST",
         headers: {
@@ -260,14 +256,12 @@ const options = useMemo(() => {
       } else {
         console.log(`Error: ${res.statusText}`);
       }
-      
     } catch (error) {
       console.error(error);
     }
     setMinValue("");
     setMaxValue("");
   };
-
   return (
     <div className="md:h-full h-full w-full md:w-full space-y-2 text-white">
       <div className="h-[650px] md:h-[49%] md:flex gap-2">
@@ -315,7 +309,7 @@ const options = useMemo(() => {
         </div>
 
         <div className="w-full h-[300px] md:h-full md:w-[50%] justify-between md:flex text-white space-y-2 md:space-y-0 gap-2">
-          <div className='border bg-gray-400 bg-opacity-30 border-gray-500 h-[49%] md:h-full rounded-md w-full md:w-[50%] flex justify-center items-center'>
+          <div className='border bg-white bg-opacity-60 border-gray-500 h-[49%] md:h-full rounded-md w-full md:w-[50%] flex justify-center items-center'>
             <Home_Model/>
           </div>
           <div className='h-[29%] md:h-full gap-2 w-full space-y-2 md:w-[50%]'>
@@ -400,7 +394,7 @@ const options = useMemo(() => {
                   {alerts.map((alert, index) => (
                 <div key={index} className='bg-gray-500 bg-opacity-70 h-[20%] rounded-md flex items-center gap-1'>
                   <span className='ml-1 text-2xl text-red-500 blinking'><IoWarning /></span>
-                  <span className='text-[7px]'>{alert}</span>
+                  <span className='text-[7px] 2xl:text-[12px]'>{alert}</span>
                 </div>
               ))}
               </div>
@@ -451,7 +445,7 @@ const options = useMemo(() => {
                 </div>
               </div>
             </div>
-            <div className='flex'>
+            {/* <div className='flex'>
               <span className='text-[10px] md:text-[15px] 2xl:text-[18px]'>S4:</span>
               <div className=' ml-1 text-[6px] md:text-[10px] 2xl:text-[12px]'>
               <div className='flex gap-1 items-center'>
@@ -463,7 +457,7 @@ const options = useMemo(() => {
                   <span>{S4_min_max.minValue} ℃</span>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className=' flex gap-3 mr-2 h-full'> 
               <span className={limit(1)} onClick={() => limit_button(1)}>1 hr</span>
               <span className={limit(3)} onClick={() => limit_button(3)}>3 hrs</span>
