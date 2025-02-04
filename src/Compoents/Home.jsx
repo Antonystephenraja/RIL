@@ -464,7 +464,7 @@ const options = useMemo(() => {
               <span className={limit(5)} onClick={() => limit_button(5)}>5 hrs</span>
             </div>
           </div>
-          <div className="h-[90%] bg-gray-400 bg-opacity-30">
+          <div className="h-[90%] w-full bg-gray-400 bg-opacity-30">
             <Line data={data} width={'100%'} options={options}></Line>
           </div>
         </div>
