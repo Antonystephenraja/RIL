@@ -24,7 +24,7 @@ const [Username, setUsername] = useState("");
       localStorage.setItem("token", data.token);
       localStorage.setItem("Limit", 100); 
       localStorage.setItem("Limit", "1hr");
-      navigate(data.redirectUrl);
+      navigate('/');
     } else {
       alert(data);
     }

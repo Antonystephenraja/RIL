@@ -95,6 +95,7 @@ const options = useMemo(() => {
     const Maximium_Limits = parseInt(limitdata.MaxLimit);
 
     return {
+      responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
@@ -403,7 +404,7 @@ const options = useMemo(() => {
         </div>
       </div>
       <div className="h-[450px] md:h-[50%] gap-2 space-y-2 md:space-y-0">
-        <div className="w-full md:w-[100%] h-[60%]  md:h-full border border-gray-500 rounded-md">
+        <div className="w-full   md:w-[100%] h-[60%]  md:h-full border border-gray-500 rounded-md">
           <div className="h-[10%] bg-gray-500 bg-opacity-70 flex justify-between items-center">
             <span className="m-2">Live Trend</span>
             <div className='flex'>
@@ -464,8 +465,12 @@ const options = useMemo(() => {
               <span className={limit(5)} onClick={() => limit_button(5)}>5 hrs</span>
             </div>
           </div>
-          <div className="h-[90%] w-full bg-gray-400 bg-opacity-30">
-            <Line data={data} width={'100%'} options={options}></Line>
+      
+          <div className="h-[90%] bg-gray-400 bg-opacity-30">
+            <div className='w-full h-full '>
+              <Line data={data} width={"100%"}  options={options} />
+            </div>
+           
           </div>
         </div>
         
