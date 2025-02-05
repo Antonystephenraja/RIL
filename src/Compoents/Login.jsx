@@ -44,7 +44,7 @@ const Login = () => {
           <div className="h-[78%] flex justify-center items-center">
             <img src={utmaps} className="" />
           </div>
-          <div className="flex justify-center items-center text-center text-xs md:textbase">
+          <div className="flex justify-center items-center text-center text-xs md:text-base">
             <span className="opacity-70 text-white rounded-md">
               µTMapS & µSTMapS are IIoT-enabled temperature measurement and
               temperature profiling sensors that capture continuous measurements

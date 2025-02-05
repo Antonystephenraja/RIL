@@ -47,7 +47,7 @@ const Protected_Route = () => {
     <>
       {isAuthenticated ? (
         <div
-          className="h-[1200px] md:h-[100vh] bg-cover bg-center p-2 font-serif"
+          className="h-[1200px] md:h-[100vh] bg-cover bg-center p-2"
           style={{ backgroundImage: `url(${bgImage})` }}
         >
           <div className="h-[7%]">
