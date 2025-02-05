@@ -403,7 +403,7 @@ const Home = () => {
                           onKeyDown={handleKeyDown}
                           onPaste={(e) => e.preventDefault()}
                           placeholder="Enter Minimum Value"
-                          className="p-1 border rounded-md text-black text-[10px] 2xl:text-[15px] h-[10%] w-full"
+                          className="p-1 border rounded-md text-black text-[10px] xl:text-[6px] h-[10%] w-full"
                         />
                       </div>
 
@@ -424,7 +424,7 @@ const Home = () => {
                           onKeyDown={handleKeyDown}
                           onPaste={(e) => e.preventDefault()}
                           placeholder="Enter Maximum Value"
-                          className="p-1 border rounded-md text-black text-[10px] 2xl:text-[15px] h-[10%] w-full"
+                          className="p-1 border rounded-md text-black text-[10px] xl:text-[6px] h-[10%] w-full"
                         />
                       </div>
                     </div>
@@ -434,7 +434,7 @@ const Home = () => {
                       className="w-[20%] p-1 flex justify-center items-center hover:cursor-pointer transform transition-transform duration-300 hover:scale-110"
                       onClick={Limit_submit}
                     >
-                      <MdOutlineUpload className="text-[40px] bg-orange-400 rounded-md" />
+                      <MdOutlineUpload className="text-[40px] 2xl:text-[30px] bg-orange-400 rounded-md" />
                     </div>
                   </div>
                 </form>

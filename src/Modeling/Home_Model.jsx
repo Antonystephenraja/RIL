@@ -21,7 +21,7 @@ const Home_Model = () => {
             <div>
               <div className='flex items-center justify-center '>
                 <span><TbTemperaturePlus className='text-[10px] md:text-[18px] 2xl:text-[15px]'/></span>
-                <span className='text-[10px] md:text-[15px] 2xl:text-[12px]'>{Active_Last_Value.Sensor1} ℃</span>
+                <span className='text-[10px] md:text-[12px] 2xl:text-[12px]'>{Active_Last_Value.Sensor1} ℃</span>
               </div>
             </div>
          </div>
@@ -35,7 +35,7 @@ const Home_Model = () => {
             <div>
               <div className='flex items-center justify-center gap-1'>
                 <span><TbTemperaturePlus className='text-[10px] md:text-[15px] 2xl:text-[15px]'/></span>
-                <span className='text-[10px] md:text-[15px] 2xl:text-[12px]'>{Active_Last_Value.Sensor2} ℃</span>
+                <span className='text-[10px] md:text-[12px] 2xl:text-[12px]'>{Active_Last_Value.Sensor2} ℃</span>
               </div>
 
             </div>
@@ -50,9 +50,8 @@ const Home_Model = () => {
             <div>
               <div className='flex items-center justify-center '>
                 <span><TbTemperaturePlus className='text-[10px] md:text-[15px] 2xl:text-[15px]'/></span>
-                <span className='text-[10px] md:text-[15px] 2xl:text-[12px]'>{Active_Last_Value.Sensor3} ℃</span>
+                <span className='text-[10px] md:text-[12px] 2xl:text-[12px]'>{Active_Last_Value.Sensor3} ℃</span>
               </div>
-
             </div>
          </div>
       </div>
