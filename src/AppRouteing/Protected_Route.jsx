@@ -34,7 +34,7 @@ const Protected_Route = () => {
         });
     } else {
       console.log("No Token");
-      setLoading(false); 
+      setLoading(false);
     }
   }, []);
 
