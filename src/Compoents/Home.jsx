@@ -138,7 +138,7 @@ const Home = () => {
           tooltip: {
             callbacks: {
               label: function (context) {
-                return `${context.parsed.y} mm`;
+                return `${context.parsed.y} ℃`;
               },
             },
           },

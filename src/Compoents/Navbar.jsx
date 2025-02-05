@@ -53,7 +53,7 @@ const getButtonClass = (id) => {
       className={getButtonClass(2)}
       onClick={() => submitbutton(2)}
     >
-      Analysis
+      Data Trend
     </div>
     <div
       className={getButtonClass(3)}
