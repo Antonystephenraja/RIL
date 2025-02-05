@@ -96,6 +96,7 @@ const options = useMemo(() => {
     return {
       responsive: true,
       maintainAspectRatio: false,
+      // width: 500,
       plugins: {
         legend: {
           display: true,
@@ -466,9 +467,7 @@ const options = useMemo(() => {
           </div>
     
           <div className="h-[90%] bg-gray-400 bg-opacity-30">
-            <div className='w-full h-full'>
-              <Line data={data} width={"100%"}  options={options} />
-            </div>
+              <Line data={data} height={"20%"} width={"100"}  options={options} />
            
           </div>
         </div>
