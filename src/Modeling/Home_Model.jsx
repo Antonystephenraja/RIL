@@ -2,10 +2,12 @@ import React from 'react';
 import Images from '../Assets/rilsensor.png';
 import { TbTemperaturePlus } from "react-icons/tb";
 import { useAlldata } from '../AppRouteing/DataWrapping';
-
+import { TbDeviceDesktopCheck } from "react-icons/tb";
+import { TbDeviceDesktopCancel } from "react-icons/tb";
 const Home_Model = () => {
-    const {Sensordata,terminalOutput,setTerminalOutput }=useAlldata();
+    const {Sensordata }=useAlldata();
     const Active_Last_Value = Sensordata && Sensordata.value ? Sensordata.value :['N/A']
+    const Sensor_status = Sensordata.activityStatus;
 
   return (
     <div className="relative mt-[20%] h-[100%]">
@@ -40,6 +42,19 @@ const Home_Model = () => {
 
             </div>
          </div>
+      </div>
+      <div className='absolute top-[-10%] left-[122%]'>
+         {Sensor_status === "active" ? (
+            <span className="border  p-1 rounded-md border-gray-400 bg-green-400 text-black text-[10px] 2xl:text-[15px] m-1 flex gap-1 items-center">
+              <TbDeviceDesktopCheck />
+              Active
+            </span>
+          ) : (
+            <span className="border p-1 rounded-md border-gray-400 h-[10%]  bg-red-400 text-black text-[10px] 2xl:text-[15px] m-1 flex gap-1 items-center">
+              <TbDeviceDesktopCancel />
+              Inactive
+            </span>
+          )}
       </div>
       <div
         className="absolute top-[40%] w-[120%] md:top-[58%] left-[-60%]  md:left-[-20%] transform -translate-x-2/4 bg-black bg-opacity-70 rounded flex justify-center items-center text-white text-xs 

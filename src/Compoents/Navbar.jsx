@@ -69,7 +69,7 @@ const getButtonClass = (id) => {
     </div>
 
     {/* Logo */}
-    <div className="w-[60%] md:w-[8%]">
+    <div className="w-[60%] md:w-[10%] mb-2">
       <img src={Ril_Img} alt="RIL" />
     </div>
 

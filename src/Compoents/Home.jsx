@@ -3,8 +3,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { TbTemperatureSun } from "react-icons/tb";
 import zoomPlugin from "chartjs-plugin-zoom";
-import { TbDeviceDesktopCheck } from "react-icons/tb";
-import { TbDeviceDesktopCancel } from "react-icons/tb";
 import { FaTemperatureArrowDown } from "react-icons/fa6";
 import { FaTemperatureArrowUp } from "react-icons/fa6";
 import { IoWarning } from "react-icons/io5";
@@ -365,17 +363,7 @@ const Home = () => {
             <div className="h-[100%] md:h-[29%] w-full md:w-full border border-gray-500  rounded-md">
               <div className="bg-gray-500  bg-opacity-70 flex justify-between ">
                 <span className="">Set Threshold</span>
-                {Sensor_status === "active" ? (
-                  <span className="border border-gray-400 rounded-sm bg-green-400 text-black text-[10px] m-1 flex gap-1 items-center">
-                    <TbDeviceDesktopCheck />
-                    Active
-                  </span>
-                ) : (
-                  <span className="border border-gray-400 h-[10%] rounded-sm bg-red-400 text-black text-[10px] m-1 flex gap-1 items-center">
-                    <TbDeviceDesktopCancel />
-                    Inactive
-                  </span>
-                )}
+                
               </div>
               {/* Form Section */}
               <div className="p-0.5 h-[72%] bg-gray-400 bg-opacity-30">
@@ -403,7 +391,7 @@ const Home = () => {
                           onKeyDown={handleKeyDown}
                           onPaste={(e) => e.preventDefault()}
                           placeholder="Enter Minimum Value"
-                          className="p-1 border rounded-md text-black text-[10px] xl:text-[6px] h-[10%] w-full"
+                          className="p-1 border rounded-md text-black text-[10px] xl:text-[7px] 2xl:text-[13px] h-[10%] w-full"
                         />
                       </div>
 
@@ -424,7 +412,7 @@ const Home = () => {
                           onKeyDown={handleKeyDown}
                           onPaste={(e) => e.preventDefault()}
                           placeholder="Enter Maximum Value"
-                          className="p-1 border rounded-md text-black text-[10px] xl:text-[6px] h-[10%] w-full"
+                          className="p-1 border rounded-md text-black text-[10px] xl:text-[7px] 2xl:text-[13px] h-[10%] w-full"
                         />
                       </div>
                     </div>
@@ -472,10 +460,10 @@ const Home = () => {
           <div className="h-[10%] bg-gray-500 bg-opacity-70 flex justify-between items-center">
             <span className="m-2">Live Trend</span>
             <div className="flex">
-              <span className="text-[10px] md:text-[15px] 2xl:text-[18px]">
+              <span className="text-[10px] md:text-[19px] 2xl:text-[18px]">
                 S1:
               </span>
-              <div className=" ml-1 text-[6px] md:text-[10px] 2xl:text-[12px]">
+              <div className=" ml-1 text-[6px] md:text-[11px] 2xl:text-[12px] font-bold">
                 <div className="flex gap-1 items-center">
                   <span className="text-red-500">
                     <FaTemperatureArrowUp />
@@ -491,10 +479,10 @@ const Home = () => {
               </div>
             </div>
             <div className="flex">
-              <span className="text-[10px] md:text-[15px] 2xl:text-[18px]">
+              <span className="text-[10px] md:text-[19px] 2xl:text-[18px]">
                 S2:
               </span>
-              <div className=" ml-1 text-[6px] md:text-[10px] 2xl:text-[12px]">
+              <div className=" ml-1 text-[6px] md:text-[10px] 2xl:text-[12px] font-bold">
                 <div className="flex gap-1 items-center">
                   <span className="text-red-500">
                     <FaTemperatureArrowUp />
@@ -510,10 +498,10 @@ const Home = () => {
               </div>
             </div>
             <div className="flex">
-              <span className="text-[10px] md:text-[15px] 2xl:text-[18px]">
+              <span className="text-[10px] md:text-[19px] 2xl:text-[18px]">
                 S3:
               </span>
-              <div className=" ml-1 text-[6px] md:text-[10px] 2xl:text-[12px]">
+              <div className=" ml-1 text-[6px] md:text-[10px] 2xl:text-[12px] font-bold">
                 <div className="flex gap-1 items-center">
                   <span className="text-red-500">
                     <FaTemperatureArrowUp />
