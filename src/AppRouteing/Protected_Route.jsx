@@ -6,12 +6,13 @@ import Navbar from "../Compoents/Navbar";
 const Protected_Route = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true); // New state for loading
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      fetch("http://localhost:4000/backend/validateToken", {
+      fetch(`${apiUrl}/backend/validateToken`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
