@@ -47,6 +47,7 @@ const Home = () => {
   const [Minvalue, setMinValue] = useState("");
   const [MaxValue, setMaxValue] = useState("");
   const Sensor_status = Sensordata.activityStatus;
+  
 
   const [DataLimit, setDeviceLimit] = useState(() => {
     return parseInt(localStorage.getItem("Limit")) || 1;
@@ -356,7 +357,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
         <div className="w-full h-[300px] md:h-full md:w-[50%] justify-between md:flex text-white space-y-2 md:space-y-0 gap-2">
           <div className="border bg-white bg-opacity-60 border-gray-500 h-[49%] md:h-full rounded-md w-full md:w-[50%] flex justify-center items-center">
             <Home_Model />
@@ -459,7 +459,7 @@ const Home = () => {
                     <span className="ml-1 text-2xl text-red-500 blinking">
                       <IoWarning />
                     </span>
-                    <span className="text-[7px] 2xl:text-[12px]">{alert}</span>
+                    <span className="text-[9px] 2xl:text-[12px]">{alert}</span>
                   </div>
                 ))}
               </div>

@@ -26,7 +26,7 @@ const Terminal = ({ output }) => {
         <div
           key={index}
           className={
-            line.type === "Error"? "text-red-400 text-[11px] md:text-[14px] 2xl:text-[20px]": line.type === "error"? "text-yellow-400":"text-green-400 text-[11px] md:text-[14px] 2xl:text-[20px]"
+            line.type === "Error"? "text-red-400 text-[11px] md:text-[9px] 2xl:text-[20px]": line.type === "error"? "text-yellow-400":"text-green-400 text-[11px] md:text-[13px] 2xl:text-[20px]"
           }
         >
           {line.type === "command" ? `> ${line.text}` : `> ${line.text}`}

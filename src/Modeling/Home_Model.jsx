@@ -17,11 +17,11 @@ const Home_Model = () => {
         md:text-sm md:w-[70%] md:h-[20%] lg:text-base border border-orange-400 border-b-2 transition-transform duration-300 hover:scale-[110%] hover:cursor-pointer  hover:left-[-21%]"
       >
           <div className='grid grid-rows-2'>
-            <div className='text-[10px] md:text-[18px] flex items-center justify-center 2xl:text-[15px]'>S1</div>
+            <div className='text-[10px] md:text-[18px]  flex items-center justify-center 2xl:text-[15px]'>S1</div>
             <div>
               <div className='flex items-center justify-center '>
                 <span><TbTemperaturePlus className='text-[10px] md:text-[18px] 2xl:text-[15px]'/></span>
-                <span className='text-[10px] md:text-[18px] 2xl:text-[12px]'>{Active_Last_Value.Sensor1} ℃</span>
+                <span className='text-[10px] md:text-[15px] 2xl:text-[12px]'>{Active_Last_Value.Sensor1} ℃</span>
               </div>
             </div>
          </div>
