@@ -25,7 +25,6 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { MdOutlineUpload } from "react-icons/md";
 import { useAlldata } from '../AppRouteing/DataWrapping';
 import Terminal from './Terminal';
-import Utmaps from '../Modeling/Utmaps';
 import Home_Model from '../Modeling/Home_Model';
 
 // Register required Chart.js components

@@ -1,9 +1,8 @@
 import React ,{useState} from 'react';
 import bgImage from '../Assets/bg.png';
 import Xyma_white_bg from '../Assets/xyma.png';
-import Utmaps from './../Modeling/Utmaps';
 import { useNavigate } from "react-router-dom";
-
+import utmaps from '../Assets/uTMAPS_1.55__1_-removebg-preview.png'
 
 const Login = () => {
 const [Username, setUsername] = useState("");
@@ -41,10 +40,18 @@ const [Username, setUsername] = useState("");
     >
       <div className="border border-gray-500 w-[90%] h-[90%] md:w-[70%] md:h-[70%] grid md:grid-cols-2 rounded-md">
         {/* Left Section */}
-        <div className="border-r  border-gray-400 bg-gray-400 bg-opacity-20 flex justify-center items-center">
-          <div className='h-[90%]'>
-            <span className="text-xl font-semibold "><Utmaps/></span>
+        <div className="border-r  border-gray-400 bg-gray-400 bg-opacity-20">
+          <div className='h-[78%] flex justify-center items-center'>
+            <img src={utmaps} className=''/>
           </div>
+          <div className="flex justify-center items-center text-center ">
+            <span className='opacity-70 text-white rounded-md'>
+              µTMapS & µSTMapS are IIoT-enabled temperature measurement and temperature 
+              profiling sensors that capture continuous measurements at multiple points with 
+              a single customizable waveguide.
+            </span>
+          </div>
+
         </div>
 
         {/* Right Section */}
