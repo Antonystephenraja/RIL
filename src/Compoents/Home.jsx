@@ -466,7 +466,7 @@ const options = useMemo(() => {
             </div>
           </div>
     
-          <div className="h-[90%] bg-gray-400 border bg-opacity-30">
+          <div className="h-[90%] bg-gray-400 bg-opacity-30">
             <div className='w-full h-full'>
               <Line data={data} width={"100%"}  options={options} />
             </div>
