@@ -45,7 +45,9 @@ const Home = () => {
   const [Minvalue, setMinValue] = useState("");
   const [MaxValue, setMaxValue] = useState("");
   const Sensor_status = Sensordata.activityStatus;
-  
+
+  console.log("sensor data ---->", Sensordata);
+  // console.log("s1 ->", Sensordata.Sensor1[0]);
 
   const [DataLimit, setDeviceLimit] = useState(() => {
     return parseInt(localStorage.getItem("Limit")) || 1;
@@ -344,13 +346,61 @@ const Home = () => {
                   </span>
                 </div>
               </div>
-              <div className="border bg-gray-400 bg-opacity-30 border-gray-500 w-[50%] rounded-md">
-                <div className="h-[23%] bg-gray-500 bg-opacity-70 text-white px-2 py-1">
+              <div className="bg-gray-400 bg-opacity-30 w-[50%] rounded-md overflow-auto">
+                {/* <div className="h-[23%] bg-gray-500 bg-opacity-70 text-white px-2 py-1">
                   Terminal Info
                 </div>
                 <div className="h-[76%]">
                   <Terminal output={terminalOutput} />
-                </div>
+                </div> */}
+
+                <table className="min-w-full table-auto border-collapse border text-xs text-gray-200">
+                  <thead>
+                    <tr>
+                      <th className="border border-gray-500 px-2 py-1">S.No</th>
+                      <th className="border border-gray-500 px-2 py-1">S1</th>
+                      <th className="border border-gray-500 px-2 py-1">S2</th>
+                      <th className="border border-gray-500 px-2 py-1">S3</th>
+                      <th className="border border-gray-500 px-2 py-1">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Sensordata.Sensor1 &&
+                      Sensordata.Sensor1.length > 0 &&
+                      Sensordata.Sensor1.map((value, index) => {
+                        if (
+                          Sensordata.Sensor1[index] &&
+                          Sensordata.Sensor2[index] &&
+                          Sensordata.Sensor3[index] &&
+                          Sensordata.Timestamp[index]
+                        ) {
+                          return (
+                            <tr key={index}>
+                              <td className="border border-gray-500 px-2 py-1">
+                                {index + 1}
+                              </td>
+                              <td className="border border-gray-500 px-2 py-1">
+                                {Sensordata.Sensor1[index]}℃
+                              </td>
+                              <td className="border border-gray-500 px-2 py-1">
+                                {Sensordata.Sensor2[index]}℃
+                              </td>
+                              <td className="border border-gray-500 px-2 py-1">
+                                {Sensordata.Sensor3[index]}℃
+                              </td>
+                              <td
+                                className="border border-gray-500 px-2 py-1"
+                                style={{ whiteSpace: "nowrap" }}
+                              >
+                                {Sensordata.Timestamp[index]}
+                              </td>
+                            </tr>
+                          );
+                        }
+                        return null;
+                      })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -363,7 +413,6 @@ const Home = () => {
             <div className="h-[100%] md:h-[29%] w-full md:w-full border border-gray-500  rounded-md">
               <div className="bg-gray-500  bg-opacity-70 flex justify-between ">
                 <span className="">Set Threshold</span>
-                
               </div>
               {/* Form Section */}
               <div className="p-0.5 h-[72%] bg-gray-400 bg-opacity-30">
