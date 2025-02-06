@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.24201153.css",
-    "main.js": "/static/js/main.664416e6.js",
+    "main.css": "/static/css/main.24bfa94e.css",
+    "main.js": "/static/js/main.18cdb49c.js",
     "static/js/685.7b6433a5.chunk.js": "/static/js/685.7b6433a5.chunk.js",
     "static/media/rilsensor.png": "/static/media/rilsensor.2abd9414adb1865017b5.png",
     "static/media/bg.png": "/static/media/bg.e519cb2d2c545d6fb5b6.png",
@@ -11,7 +11,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.24201153.css",
-    "static/js/main.664416e6.js"
+    "static/css/main.24bfa94e.css",
+    "static/js/main.18cdb49c.js"
   ]
 }
