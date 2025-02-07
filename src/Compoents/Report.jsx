@@ -24,23 +24,20 @@ const Report = () => {
   const [intervalOption, setIntervalOption] = useState("hour");
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const generateExcel = async (e) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const response = await axios.get(
-        // "http://34.93.162.58:4000/sensor/getDemokitUtmapsData",
-        "https://hindalco.xyma.live/backend/getHindalcoReport",
-        // "http://localhost:4000/backend/getHindalcoReport",
-        {
-          params: {
-            // projectName: projectName,
-            fromDate: fromDate,
-            toDate: toDate,
-            count: count,
-          },
-        }
-      );
+      const response = await axios.get(`${apiUrl}/backend/getRilReport`, {
+        params: {
+          // projectName: projectName,
+          fromDate: fromDate,
+          toDate: toDate,
+          count: count,
+        },
+      });
       setLoading(false);
 
       // console.log("report data", response.data.data);
@@ -253,7 +250,7 @@ const Report = () => {
           {selectedReportOption === "datePicker" && (
             <form
               className="p-4 md:p-8 flex flex-col items-center justify-center gap-6"
-              // onSubmit={generateExcel}
+              onSubmit={generateExcel}
             >
               <center className="text-xl font-medium">Select Date Range</center>
 
@@ -296,7 +293,7 @@ const Report = () => {
           {selectedReportOption === "countWiseData" && (
             <form
               className="flex flex-col gap-4 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-              // onSubmit={generateExcel}
+              onSubmit={generateExcel}
             >
               <center className="text-xl font-medium">Select Count</center>
               <div className="flex flex-col gap-2 md:gap-4">

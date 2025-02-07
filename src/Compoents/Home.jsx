@@ -80,7 +80,7 @@ const Home = () => {
 
   const colors = [
     { bg: "#ff9e00" },
-    { bg: "#f87100" },
+    { bg: "#d492fc" },
     { bg: "#00e9fc" },
     { bg: "#fbff00" },
   ];
@@ -113,7 +113,7 @@ const Home = () => {
       pointHoverRadius: 2,
       fill: false,
       tension: 0.2,
-      borderWidth: 1.5,
+      borderWidth: 3,
       // hidden: index > 0,
     })),
   };
