@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { TbTemperatureSun } from "react-icons/tb";
 import zoomPlugin from "chartjs-plugin-zoom";
+
 import { FaTemperatureArrowDown } from "react-icons/fa6";
 import { FaTemperatureArrowUp } from "react-icons/fa6";
 import { IoWarning } from "react-icons/io5";
@@ -79,8 +80,8 @@ const Home = () => {
 
   const colors = [
     { bg: "#ff9e00" },
-    { bg: "#7bff63" },
-    { bg: "#ffffff" },
+    { bg: "#f87100" },
+    { bg: "#00e9fc" },
     { bg: "#fbff00" },
   ];
 
@@ -100,6 +101,7 @@ const Home = () => {
     parseInt(Sensor_Limits.MaxLimit) < parseInt(Active_Last_Value.Sensor3) &&
       `Sensor3 has exceeded the maximum Temperature at  ${Active_Last_Value.Time}.`,
   ].filter(Boolean);
+  
   const data = {
     labels: [...Timestamp].reverse(),
     datasets: [Sensor1, Sensor2, Sensor3].map((sensorData, index) => ({
@@ -108,9 +110,9 @@ const Home = () => {
       borderColor: colors[index].bg,
       backgroundColor: "rgba(54, 162, 235, 0.5)",
       fill: false,
-      tension: 0.4,
-      borderWidth: 2,
-      hidden: index > 0,
+      tension: 0.2,
+      borderWidth: 1,
+      // hidden: index > 0,
     })),
   };
 
@@ -482,7 +484,7 @@ const Home = () => {
                 Alert
               </div>
               <div
-                className="h-[82%] bg-gray-400 bg-opacity-30 space-y-2 p-2 overflow-auto"
+                className="h-[82%] bg-gray-400 bg-opacity-30 space-y-2 p-2 overflow-y-auto"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "#ffffff transparent",
@@ -587,6 +589,9 @@ const Home = () => {
               </span>
               <span className={limit(5)} onClick={() => limit_button(5)}>
                 5 hrs
+              </span>
+              <span className={limit(12)} onClick={() => limit_button(12)}>
+                12 hrs
               </span>
             </div>
           </div>
