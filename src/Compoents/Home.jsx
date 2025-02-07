@@ -348,7 +348,10 @@ const Home = () => {
                   </span>
                 </div>
               </div>
-              <div className="bg-gray-400 bg-opacity-30 w-[50%] rounded-md overflow-auto">
+              <div
+                className="bg-gray-400 bg-opacity-30 w-[50%] rounded-md overflow-auto"
+                style={{ scrollbarWidth: "thin" }}
+              >
                 {/* <div className="h-[23%] bg-gray-500 bg-opacity-70 text-white px-2 py-1">
                   Terminal Info
                 </div>
