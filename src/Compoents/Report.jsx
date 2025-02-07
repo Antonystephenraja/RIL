@@ -24,41 +24,39 @@ const Report = () => {
   const [intervalOption, setIntervalOption] = useState("hour");
   const [loading, setLoading] = useState(false);
 
-  // const generateExcel = async (e) => {
-  //   try {
-  //     e.preventDefault();
-  //     setLoading(true);
-  //     const response = await axios.get(
-  //       // "http://34.93.162.58:4000/sensor/getDemokitUtmapsData",
-  //       "https://hindalco.xyma.live/backend/getHindalcoReport",
-  //       // "http://localhost:4000/backend/getHindalcoReport",
-  //       {
-  //         params: {
-  //           // projectName: projectName,
-  //           avgFromDate: avgFromDate,
-  //           avgToDate: avgToDate,
-  //           fromDate: fromDate,
-  //           toDate: toDate,
-  //           count: count,
-  //         },
-  //       }
-  //     );
-  //     setLoading(false);
+  const generateExcel = async (e) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const response = await axios.get(
+        // "http://34.93.162.58:4000/sensor/getDemokitUtmapsData",
+        "https://hindalco.xyma.live/backend/getHindalcoReport",
+        // "http://localhost:4000/backend/getHindalcoReport",
+        {
+          params: {
+            // projectName: projectName,
+            fromDate: fromDate,
+            toDate: toDate,
+            count: count,
+          },
+        }
+      );
+      setLoading(false);
 
-  //     // console.log("report data", response.data.data);
+      // console.log("report data", response.data.data);
 
-  //     const ws = XLSX.utils.json_to_sheet(response.data.data);
-  //     const wb = XLSX.utils.book_new();
-  //     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  //     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  //     const info = new Blob([excelBuffer], {
-  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  //     });
-  //     saveAs(info, `_Report.xlsx`);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      const ws = XLSX.utils.json_to_sheet(response.data.data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const info = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(info, `_Report.xlsx`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="h-full space-y-2 m-2">

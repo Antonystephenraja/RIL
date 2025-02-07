@@ -101,7 +101,7 @@ const Home = () => {
     parseInt(Sensor_Limits.MaxLimit) < parseInt(Active_Last_Value.Sensor3) &&
       `Sensor3 has exceeded the maximum Temperature at  ${Active_Last_Value.Time}.`,
   ].filter(Boolean);
-  
+
   const data = {
     labels: [...Timestamp].reverse(),
     datasets: [Sensor1, Sensor2, Sensor3].map((sensorData, index) => ({
@@ -109,138 +109,146 @@ const Home = () => {
       data: [...sensorData].reverse(),
       borderColor: colors[index].bg,
       backgroundColor: "rgba(54, 162, 235, 0.5)",
+      pointRadius: 0,
+      pointHoverRadius: 2,
       fill: false,
       tension: 0.2,
-      borderWidth: 1,
+      borderWidth: 1.5,
       // hidden: index > 0,
     })),
   };
 
+  let Minimium_Limits;
+  let Maximium_Limits;
+
+  if (
+    Sensordata?.LimitData?.MinLimit != null &&
+    Sensordata?.LimitData?.MaxLimit != null
+  ) {
+    const limitdata = Sensordata.LimitData;
+    Minimium_Limits = parseInt(limitdata.MinLimit);
+    Maximium_Limits = parseInt(limitdata.MaxLimit);
+  }
+
   const options = useMemo(() => {
     // Ensure limits are valid before setting options
-    if (
-      Sensordata?.LimitData?.MinLimit != null &&
-      Sensordata?.LimitData?.MaxLimit != null
-    ) {
-      const limitdata = Sensordata.LimitData;
-      const Minimium_Limits = parseInt(limitdata.MinLimit);
-      const Maximium_Limits = parseInt(limitdata.MaxLimit);
 
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        // width: 500,
-        plugins: {
-          legend: {
-            display: true,
-            labels: {
-              color: "white",
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      // width: 500,
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            color: "white",
+          },
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return `${context.parsed.y} ℃`;
             },
           },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                return `${context.parsed.y} ℃`;
+        },
+        annotation: {
+          annotations: {
+            thresholdLine1: {
+              type: "line",
+              yMin: Minimium_Limits,
+              yMax: Minimium_Limits,
+              borderColor: "red",
+              borderWidth: 2,
+              borderDash: [6, 6],
+              label: {
+                content: `Threshold(${Minimium_Limits})`,
+                enabled: true,
+                position: "end",
+                backgroundColor: "rgba(255,0,0,0.7)",
+                color: "white",
+              },
+            },
+            thresholdLine2: {
+              type: "line",
+              yMin: Maximium_Limits,
+              yMax: Maximium_Limits,
+              borderColor: "red",
+              borderWidth: 2,
+              borderDash: [6, 6],
+              label: {
+                content: `Threshold(${Maximium_Limits})`,
+                enabled: true,
+                position: "end",
+                backgroundColor: "rgba(255,0,0,0.7)",
+                color: "white",
               },
             },
           },
-          annotation: {
-            annotations: {
-              thresholdLine1: {
-                type: "line",
-                yMin: Minimium_Limits,
-                yMax: Minimium_Limits,
-                borderColor: "red",
-                borderWidth: 2,
-                borderDash: [6, 6],
-                label: {
-                  content: `Threshold(${Minimium_Limits})`,
-                  enabled: true,
-                  position: "end",
-                  backgroundColor: "rgba(255,0,0,0.7)",
-                  color: "white",
-                },
-              },
-              thresholdLine2: {
-                type: "line",
-                yMin: Maximium_Limits,
-                yMax: Maximium_Limits,
-                borderColor: "red",
-                borderWidth: 2,
-                borderDash: [6, 6],
-                label: {
-                  content: `Threshold(${Maximium_Limits})`,
-                  enabled: true,
-                  position: "end",
-                  backgroundColor: "rgba(255,0,0,0.7)",
-                  color: "white",
-                },
-              },
-            },
+        },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: "xy",
           },
           zoom: {
-            pan: {
+            wheel: {
               enabled: true,
-              mode: "xy",
             },
-            zoom: {
-              wheel: {
-                enabled: true,
-              },
-              pinch: {
-                enabled: true,
-              },
-              mode: "xy",
+            pinch: {
+              enabled: true,
+            },
+            mode: "xy",
+          },
+        },
+      },
+      scales: {
+        y: {
+          position: "right",
+          title: {
+            display: true,
+            text: "Temperature(℃)",
+            font: {
+              weight: "bold",
+            },
+            color: "white",
+          },
+          grid: {
+            color: "#4b5563",
+          },
+          ticks: {
+            color: "white",
+            callback: function (value) {
+              return value + " ℃";
             },
           },
         },
-        scales: {
-          y: {
-            position: "right",
-            title: {
-              display: true,
-              text: "Temperature(℃)",
-              font: {
-                weight: "bold",
-              },
-              color: "white",
+        x: {
+          title: {
+            display: true,
+            text: "Timestamp",
+            font: {
+              weight: "bold",
             },
-            grid: {
-              color: "#aaaaaa",
-            },
-            ticks: {
-              color: "white",
-              callback: function (value) {
-                return value + " ℃";
-              },
+            color: "white",
+          },
+          ticks: {
+            color: "white",
+            font: {
+              size: 7,
             },
           },
-          x: {
-            title: {
-              display: true,
-              text: "Timestamp",
-              font: {
-                weight: "bold",
-              },
-              color: "white",
-            },
-            ticks: {
-              color: "white",
-              font: {
-                size: 7,
-              },
-            },
-            grid: {
-              color: "#aaaaaa",
-            },
+          grid: {
+            color: "#4b5563",
           },
         },
-      };
-    } else {
-      console.log("Limit data is not available yet.");
-      return {}; // Return an empty configuration or a default setup
-    }
-  }, [Sensordata]);
+      },
+    };
+    // }
+    // else {
+    //   console.log("Limit data is not available yet.");
+    //   return {}; // Return an empty configuration or a default setup
+    // }
+  }, [Minimium_Limits, Maximium_Limits]);
 
   const limit_button = (id) => {
     localStorage.setItem("Limit", id + "hr");
@@ -294,6 +302,7 @@ const Home = () => {
     setMinValue("");
     setMaxValue("");
   };
+
   return (
     <div className="md:h-full h-full w-full md:w-full space-y-2 text-white">
       <div className="h-[650px] md:h-[49%] md:flex gap-2">
@@ -350,7 +359,10 @@ const Home = () => {
               </div>
               <div
                 className="bg-gray-400 bg-opacity-30 w-[50%] rounded-md overflow-auto"
-                style={{ scrollbarWidth: "thin" }}
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "#6b7280 transparent",
+                }}
               >
                 {/* <div className="h-[23%] bg-gray-500 bg-opacity-70 text-white px-2 py-1">
                   Terminal Info
@@ -359,8 +371,8 @@ const Home = () => {
                   <Terminal output={terminalOutput} />
                 </div> */}
 
-                <table className="min-w-full table-auto border-collapse border text-xs text-gray-200">
-                  <thead>
+                <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
+                  <thead className="backdrop-blur-md sticky top-0">
                     <tr>
                       <th className="border border-gray-500 px-2 py-1">S.No</th>
                       <th className="border border-gray-500 px-2 py-1">S1</th>
