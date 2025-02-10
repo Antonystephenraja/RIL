@@ -16,7 +16,7 @@ export const AlldataProvider = ({ children }) => {
         `${apiUrl}/backend/DataCollection?limit=${limit}`
       );
       setData(response.data);
-        console.log("response", response.data);
+      // console.log("response", response.data);
       const Response_data = response ? response.data : [];
       const Sensor_status = Response_data.terminal_status;
       const sensor_last_Data = Response_data.value;

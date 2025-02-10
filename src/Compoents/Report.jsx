@@ -40,16 +40,58 @@ const Report = () => {
       });
       setLoading(false);
 
-      // console.log("report data", response.data.data);
+      if (response.data && response.data.length > 0) {
+        const ws = XLSX.utils.json_to_sheet(response.data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const info = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(info, `RIL_Report.xlsx`);
+      } else if (response.data && response.data.length === 0) {
+        alert("No data found");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-      const ws = XLSX.utils.json_to_sheet(response.data.data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-      const info = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(info, `_Report.xlsx`);
+  const generateAverageExcel = async (e) => {
+    try {
+      // console.log("before api");
+
+      e.preventDefault();
+      setLoading(true);
+      const response = await axios.get(
+        `${apiUrl}/backend/getRilAverageReport`,
+        {
+          params: {
+            // projectName: projectName,
+            avgFromDate: avgFromDate,
+            avgToDate: avgToDate,
+            averageOption: averageOption,
+            intervalFromDate: intervalFromDate,
+            intervalToDate: intervalToDate,
+            intervalOption: intervalOption,
+          },
+        }
+      );
+      setLoading(false);
+      // console.log("average response ", response.data.data);
+
+      if (response.data.data && response.data.data.length > 0) {
+        const ws = XLSX.utils.json_to_sheet(response.data.data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const info = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(info, `RIL_Report.xlsx`);
+      } else if (response.data.data && response.data.data.length === 0) {
+        alert("No data found");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -57,20 +99,44 @@ const Report = () => {
 
   return (
     <div className="h-full space-y-2 m-2">
-      <div className="h-[27%] space-y-2 md:space-y-0 md:h-[13%] md:flex justify-around text-white">
+      <div className="h-[27%] md:h-[13%] md:flex gap-32 text-white px-10">
         <div
-          className="border flex justify-center items-center w-full md:w-[10%] rounded-md"
-          onClick={() => setSelectedReportOption("datePicker")}
+          className={`basis-full border border-gray-500 flex justify-center items-center rounded-md hover:bg-orange-400 hover:scale-110 duration-200 cursor-pointer ${
+            selectedReportOption === "datePicker" ? "bg-orange-400" : ""
+          }`}
+          onClick={() => {
+            setSelectedReportOption("datePicker");
+            setCount();
+            setEnableCount(false);
+            setAvgFromDate("");
+            setAvgToDate("");
+            setIntervalFromDate("");
+            setIntervalToDate("");
+            setAverageOption("hour");
+          }}
         >
           <div className="">
             <BsCalendar2Date className="text-[300%] m-2" />
           </div>
-          <div className="text-[17px] m-2">Date Picker</div>
+          <div className="text-[17px] m-2">Date&nbsp;Picker</div>
         </div>
 
         <div
-          className="border flex justify-center items-center w-full md:w-[10%] rounded-md"
-          onClick={() => setSelectedReportOption("countWiseData")}
+          className={`basis-full border border-gray-500 flex justify-center items-center rounded-md hover:bg-orange-400 hover:scale-110 duration-200 cursor-pointer ${
+            selectedReportOption === "countWiseData" ? "bg-orange-400" : ""
+          }`}
+          onClick={() => {
+            setSelectedReportOption("countWiseData");
+            setFromDate("");
+            setToDate("");
+            setCount(100);
+            setEnableCount(false);
+            setAvgFromDate("");
+            setAvgToDate("");
+            setIntervalFromDate("");
+            setIntervalToDate("");
+            setAverageOption("hour");
+          }}
         >
           <div className="">
             <PiClockCountdown className="text-[300%] m-2" />
@@ -79,8 +145,19 @@ const Report = () => {
         </div>
 
         <div
-          className="border flex justify-center items-center w-full md:w-[10%] rounded-md"
-          onClick={() => setSelectedReportOption("averageData")}
+          className={`basis-full border border-gray-500 flex justify-center items-center rounded-md hover:bg-orange-400 hover:scale-110 duration-200 cursor-pointer ${
+            selectedReportOption === "averageData" ? "bg-orange-400" : ""
+          }`}
+          onClick={() => {
+            setSelectedReportOption("averageData");
+            setFromDate("");
+            setToDate("");
+            setCount();
+            setEnableCount(false);
+            setIntervalFromDate("");
+            setIntervalToDate("");
+            setAverageOption("hour");
+          }}
         >
           <div className="">
             <TbAlarmAverage className="text-[300%] m-2" />
@@ -89,8 +166,19 @@ const Report = () => {
         </div>
 
         <div
-          className="border flex justify-center items-center w-full md:w-[10%] rounded-md"
-          onClick={() => setSelectedReportOption("intervalData")}
+          className={`basis-full border border-gray-500 flex justify-center items-center rounded-md hover:bg-orange-400 hover:scale-110 duration-200 cursor-pointer ${
+            selectedReportOption === "intervalData" ? "bg-orange-400" : ""
+          }`}
+          onClick={() => {
+            setSelectedReportOption("intervalData");
+            setFromDate("");
+            setToDate("");
+            setCount();
+            setEnableCount(false);
+            setAvgFromDate("");
+            setAvgToDate("");
+            setAverageOption("hour");
+          }}
         >
           <div className="">
             <BsSkipForwardCircle className="text-[300%] m-2" />
@@ -102,27 +190,34 @@ const Report = () => {
       {/* main content */}
       <div className="h-[71%] md:h-[85%] flex justify-center items-center text-gray-200">
         <div className="bg-gray-400/20 rounded-md px-10 py-4">
+          {/* average option */}
           {selectedReportOption === "averageData" && (
             <form
               className="p-8 flex flex-col items-center justify-center gap-6"
-              // onSubmit={generateAverageExcel}
+              onSubmit={generateAverageExcel}
             >
               <center className="text-xl font-medium">Select Date Range</center>
-              <div className="flex flex-col gap-4">
-                <input
-                  type="date"
-                  className="text-black rounded-md px-0.5"
-                  required
-                  value={avgFromDate}
-                  onChange={(e) => setAvgFromDate(e.target.value)}
-                />
-                <input
-                  type="date"
-                  className="text-black rounded-md px-0.5"
-                  required
-                  value={avgToDate}
-                  onChange={(e) => setAvgToDate(e.target.value)}
-                />
+              <div className="flex gap-2">
+                <div className="flex flex-col gap-4 font-medium">
+                  <label>From</label>
+                  <label>To</label>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <input
+                    type="date"
+                    className="text-black rounded-md px-0.5"
+                    required
+                    value={avgFromDate}
+                    onChange={(e) => setAvgFromDate(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    className="text-black rounded-md px-0.5"
+                    required
+                    value={avgToDate}
+                    onChange={(e) => setAvgToDate(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="flex flex-col gap-2 text-sm 2xl:text-base font-medium">
                 <div className="text-center ">Average By:</div>
@@ -173,7 +268,7 @@ const Report = () => {
           {selectedReportOption === "intervalData" && (
             <form
               className="flex flex-col gap-6 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-              // onSubmit={generateAverageExcel}
+              onSubmit={generateAverageExcel}
             >
               <center className="text-xl font-medium">
                 Select Time Interval
@@ -398,6 +493,11 @@ const Report = () => {
             </form>
           )}
         </div>
+        {loading && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col justify-center items-center font-semibold text-sm">
+            <div>Your report is being downloaded!</div>
+          </div>
+        )}
       </div>
     </div>
   );
