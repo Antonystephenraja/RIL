@@ -5,7 +5,7 @@ import { TbAlarmAverage } from "react-icons/tb";
 import { BsSkipForwardCircle } from "react-icons/bs";
 import { Line } from "react-chartjs-2";
 import { BiScatterChart } from "react-icons/bi";
-
+import axios from "axios";
 import {
   Chart as ChartJS,
   LineElement,
@@ -17,7 +17,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js';
-import Dropdown from 'react-dropdown';
+import { FaChartLine } from "react-icons/fa6";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-dropdown/style.css';
@@ -26,55 +26,115 @@ import { IoArrowBackCircle } from "react-icons/io5";
 // Register required Chart.js components
 ChartJS.register(LineElement,Title, LinearScale, CategoryScale, PointElement, Tooltip, Legend,Filler);
 const Analytics = () => {
+
   const[Active_status,setActive]=useState()
+    const [count, setCount] = useState();
+
   const [startDate, setStartDate] = useState(new Date);
   const [endDate, setEndDate] = useState(new Date);
-  const [SelectedsensorConfig, setSelectedsensorConfig] = useState("");
+  const [avgFromDate, setAvgFromDate] = useState("");
+  const [avgToDate, setAvgToDate] = useState("");
+  const [averageOption, setAverageOption] = useState("hour");
+  const [intervalFromDate, setIntervalFromDate] = useState("");
+  const [intervalToDate, setIntervalToDate] = useState("");
+  const [intervalOption, setIntervalOption] = useState("hour");
+  const [enableCount, setEnableCount] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [Sensordatas,setSensorData]=useState("");
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+  let sensor1Data = [];
+  let sensor2Data = [];
+  let sensor3Data = [];
+  let timestamp = [];
+
+  if (Active_status === 1 || Active_status === 2 ||Active_status === 4) {
+      sensor1Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.Sensor1).filter(value => value !== undefined && value !== null) 
+          : [];
+
+      sensor2Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.Sensor2).filter(value => value !== undefined && value !== null) 
+          : [];
+
+      sensor3Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.Sensor3).filter(value => value !== undefined && value !== null) 
+          : [];
+      timestamp = Sensordatas && Array.isArray(Sensordatas) 
+        ? Sensordatas.map(item => item.Time).filter(value => value !== undefined && value !== null) 
+        : [];
+  } else if (Active_status === 3) {
+      sensor1Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.avgS1).filter(value => value !== undefined && value !== null) 
+          : [];
+      sensor2Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.avgS2).filter(value => value !== undefined && value !== null) 
+          : [];
+      sensor3Data = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.avgS3).filter(value => value !== undefined && value !== null) 
+          : [];
+
+      timestamp = Sensordatas && Array.isArray(Sensordatas) 
+          ? Sensordatas.map(item => item.dateRange).filter(value => value !== undefined && value !== null) 
+          : [];
+
+  } 
+  
+  console.log("sensor1Data=",Sensordatas,"status=",Active_status);
 
 
-const handleDownload = () => {
-  console.log("Download triggered");
-  // Implement your download logic here
+
+
+
+const colors = [
+  { bg: "#ff9e00" },
+  { bg: "#d492fc" },
+  { bg: "#00e9fc" },
+  { bg: "#fbff00" },
+];
+
+const data = {
+  labels: timestamp.reverse(),
+  datasets: [
+      {
+          label: "Sensor 1",
+          data: sensor1Data.reverse(),
+          backgroundColor: "#04f5b7",
+
+          borderColor: colors[0].border,
+          fill: true,
+          tension: 0.2,
+          borderWidth: 2,
+          hidden: false, 
+      },
+      {
+          label: "Sensor 2",
+          data: sensor2Data.reverse(),
+          backgroundColor: "#d77806",
+
+          borderColor: colors[1].border,
+          fill: true,
+          tension: 0.2,
+          borderWidth: 2,
+          hidden: true, 
+      },
+      {
+          label: "Sensor 3",
+          data: sensor3Data.reverse(),
+          backgroundColor: "#cedb02",
+
+          borderColor: colors[2].border,
+          fill: true,
+          tension: 0.2,
+          borderWidth: 2,
+          hidden: true,
+      },
+  ],
 };
 
-
-  const {Sensordata}=useAlldata();
-  const Sensor1 = Array.isArray(Sensordata && Sensordata.Sensor1) ? Sensordata.Sensor1 : ["N/A"]; 
-  const Sensor2 = Array.isArray(Sensordata && Sensordata.Sensor2) ? Sensordata.Sensor2 : ["N/A"]; 
-  const Sensor3 = Array.isArray(Sensordata && Sensordata.Sensor3) ? Sensordata.Sensor3 : ["N/A"]; 
-  const Sensor4 = Array.isArray(Sensordata && Sensordata.Sensor4) ? Sensordata.Sensor4 : ["N/A"]; 
-  const Timestamp = Array.isArray(Sensordata && Sensordata.Timestamp) ? Sensordata.Timestamp : ["N/A"];  
-  const colors = [
-    { border: "#f2973b9c", gradientStart: "#91aafd28", gradientMid: "#f2973b" },
-    { border: "#3b82f69c", gradientStart: "#a3e63528", gradientMid: "#3b82f6" },
-    { border: "#34d3999c", gradientStart: "#f43f5e28", gradientMid: "#34d399" },
-    { border: "#f871719c", gradientStart: "#38bdf828", gradientMid: "#f87171" },
-  ];
- 
-  const data = {
-    labels: [...Timestamp].reverse(),
-    datasets: [Sensor1, Sensor2, Sensor3, Sensor4].map((sensorData, index) => ({
-      label: `Sensor ${index + 1}`,
-      data: [...sensorData].reverse(),
-      backgroundColor: (context) => {
-        const chart = context.chart;
-        const { ctx, chartArea } = chart;
-        if (!chartArea) return null;
-        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        gradient.addColorStop(0, colors[index].gradientStart);
-        gradient.addColorStop(0.5, colors[index].gradientMid);
-        return gradient;
-      },
-      borderColor: colors[index].border,
-      fill: true,
-      tension: 0.2,
-      borderWidth: 2,
-      hidden: index > 0, // Hide datasets for Sensor2, Sensor3, Sensor4 initially
-    })),
-  };
-
-  const options = useMemo(
-    () => ({
+  const options = {
       maintainAspectRatio: false,
       plugins: {
         legend: {
@@ -144,31 +204,77 @@ const handleDownload = () => {
           },
         },
       },
-    }),
-    []
-  );
+    }
 
   const HandleButton=async(id)=>{
 setActive(id);
+setSensorData("")
   }
 
-  const dropdown_options = [
-    'Select', 'Sensor1', 'Sensor2', 'Sensor3', 'Sensor4','All Sensor'
-  ];
 
-  const defaultOption = dropdown_options[0];
-  const generateAverageAnalyticsData = async (e) => {
+  const generateAverageExcel = async (e) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const response = await axios.get(
+        `${apiUrl}/backend/getRilAverageReport`,
+        {
+          params: {
+            // projectName: projectName,
+            avgFromDate: avgFromDate,
+            avgToDate: avgToDate,
+            averageOption: averageOption,
+            intervalFromDate: intervalFromDate,
+            intervalToDate: intervalToDate,
+            intervalOption: intervalOption,
+          },
+        }
+      );
+      setLoading(false);
+      if (response.data) {
+        const datas =response.data.data
+       
+        setSensorData(datas)
+      } else if (response.data && response.data.length === 0) {
+        alert("No data found");
+      }
+   
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const generateExcel = async (e) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const response = await axios.get(`${apiUrl}/backend/getRilReport`, {
+        params: {
+          // projectName: projectName,
+          fromDate: fromDate,
+          toDate: toDate,
+          count: count,
+        },
+      });
+      setLoading(false);
+      if (response.data && response.data.length > 0) {
+        setSensorData(response.data)
+      } else if (response.data && response.data.length === 0) {
+        alert("No data found");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  }
   return (
     <div className=' w-full text-white h-full md:flex gap-2 '>
       <div className='w-full h-[30%] md:h-full md:w-[40%] rounded-md flex justify-center items-center'>
       {Active_status === 1 ? (
           <div className="space-y-4 border border-gray-400 p-[10%] rounded-md">
            <form
-                  className="flex flex-col items-center justify-center gap-6 2xl:gap-12 h-full"
-                  onSubmit={generateAverageAnalyticsData}
-                >
+              className="flex flex-col items-center justify-center gap-6 2xl:gap-12 h-full"
+              onSubmit={generateExcel}
+            >
                   <div className='flex items-center gap-1 cursor-pointer' onClick={()=>setActive(0)}>
               <span className='text-[40px]'>
                 <IoArrowBackCircle/>
@@ -178,62 +284,46 @@ setActive(id);
               </span>
               
             </div>
-                  <center className="text-xl 2xl:text-2xl font-medium">
-                    Select Date Range
-                  </center>
-                  <div className="flex gap-2">
-                    <div className="flex flex-col gap-4 font-medium">
-                      <div>Configuration</div>
-                      <label>From</label>
-                      <label>To</label>
-                    </div>
-                    <div className="flex flex-col gap-4">
-                      <select
-                        name="sensorConfiguration"
-                        className="text-black rounded-md p-1 text-sm 2xl:text-base"
-                        onChange={(e) =>
-                          setSelectedsensorConfig(e.target.value)
-                        }
-                        value={SelectedsensorConfig}
-                        required
-                      >
-                        <option value="" disabled>
-                          Select Configuration
-                          </option>
-                          <option value="sensor1">Sensor 1</option>
-                          <option value="sensor2">Sensor 2</option>
-                          <option value="sensor3">Sensor 3</option>
-                      </select>
-
-                      <input
-                        type="date"
-                        className="text-black rounded-md px-0.5"
-                        required
-                        // value={fromDate}
-                        // onChange={(e) => setFromDate(e.target.value)}
-                      />
-                      <input
-                        type="date"
-                        className="text-black rounded-md px-0.5"
-                        required
-                        // value={toDate}
-                        // onChange={(e) => setToDate(e.target.value)}
-                      />
-                    </div>
+              <center className="text-xl font-medium">Select Date Range</center>
+                <div className="flex gap-2">
+                  <div className="flex flex-col gap-4 font-medium">
+                    <label>From</label>
+                    <label>To</label>
                   </div>
-                  <div className="flex justify-center gap-4 font-medium">
-                    <button
-                      className="rounded-md bg-[#e4ba4c] hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-black"
-                      type="submit"
-                    >
-                      <BiScatterChart className="text-lg" />
-                      Plot Graph
-                    </button>
+                  <div className="flex flex-col gap-4">
+                    <input
+                      type="date"
+                      className="text-black rounded-md px-0.5"
+                      required
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                    />
+  
+                    <input
+                      type="date"
+                      className="text-black rounded-md px-0.5"
+                      required
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                    />
                   </div>
-                </form>
+                </div>
+                <div className="flex justify-center gap-4 font-medium">
+                  <button
+                    type="submit"
+                    className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  >
+                    <FaChartLine className="text-lg" />
+                    Plot
+                  </button>
+                </div>
+              </form>
           </div>
         )   : Active_status === 2 ? (
-          <div className="flex flex-col gap-4 2xl:gap-12 items-center justify-center border p-[10%] rounded-md">
+            <form
+              className="flex flex-col gap-4 py-4 md:py-8 px-5 md:px-10 items-center justify-center border rounded-md"
+              onSubmit={generateExcel}
+            >
                   <div className='flex items-center gap-1 cursor-pointer' onClick={()=>setActive(0)}>
                     <span className='text-[40px]'>
                       <IoArrowBackCircle/>
@@ -243,243 +333,195 @@ setActive(id);
                     </span>
                     
                   </div>
-                  <center className="text-xl 2xl:text-2xl font-medium">
-                    Select Count
-                  </center>
-                  <div className="grid grid-cols-2 gap-2 md:gap-4 text-white">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="option1"
-                        name="options"
-                        value={100}
-                        // checked={count === 100}
-                        readOnly
-                        className="cursor-pointer mr-1"
-                        // onClick={() => {
-                        //   setCount(100);
-                        //   setEnableCount(false);
-                        // }}
-                      />
-                      <label htmlFor="option1" className="cursor-pointer">
-                        Last 100 Data
-                      </label>
-                    </div>
-
-                    <div>
-                      <input
-                        type="radio"
-                        id="option2"
-                        name="options"
-                        value={500}
-                        // checked={count === 500}
-                        readOnly
-                        className="cursor-pointer mr-1"
-                        // onClick={() => {
-                        //   setCount(500);
-                        //   setEnableCount(false);
-                        // }}
-                      />
-                      <label htmlFor="option2" className="cursor-pointer">
-                        Last 500 Data
-                      </label>
-                    </div>
-
-                    <div>
-                      <input
-                        type="radio"
-                        id="option3"
-                        name="options"
-                        value={1000}
-                        // checked={count === 1000}
-                        readOnly
-                        className="cursor-pointer mr-1"
-                        // onClick={() => {
-                        //   setCount(1000);
-                        //   setEnableCount(false);
-                        // }}
-                      />
-                      <label htmlFor="option3" className="cursor-pointer">
-                        Last 1000 Data
-                      </label>
-                    </div>
-
-                    <div>
-                      <input
-                        type="radio"
-                        id="option4"
-                        name="options"
-                        className="cursor-pointer mr-1"
-                        // checked={enableCount === true}
-                        readOnly
-                        // onClick={() => {
-                        //   setCount(0);
-                        //   setEnableCount(true);
-                        // }}
-                      />
-                      <label htmlFor="option4" className="cursor-pointer">
-                        Custom Count
-                      </label>
-                    </div>
-
-                    {/* {enableCount && (
-                      <>
-                        <label htmlFor="count">Enter Count:</label>
+                 <center className="text-xl font-medium">Select Count</center>
+                    <div className="flex flex-col gap-2 md:gap-4">
+                      <div className="flex items-center">
                         <input
-                          type="number"
-                          id="count"
-                          // value={count}
-                          className="text-black w-32 rounded-md px-2"
-                          // onChange={(e) =>
-                          //   setCount(parseInt(e.target.value) || 0)
-                          // }
+                          type="radio"
+                          id="option1"
+                          name="options"
+                          value={100}
+                          checked={count === 100}
+                          readOnly
+                          className="cursor-pointer mr-1"
+                          onClick={() => {
+                            setCount(100);
+                            setEnableCount(false);
+                          }}
                         />
-                      </>
-                    )} */}
-                  </div>
-                  <div className="flex gap-4">
-                    <button
-                      className="rounded-md bg-[#e4ba4c] hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-black font-medium"
-                      // onClick={generateAnalyticsData}
-                    >
-                      <BiScatterChart className="text-lg" />
-                      Plot Graph
-                    </button>
-                  </div>
-                </div>
+                        <label htmlFor="option1" className="cursor-pointer">
+                          Last 100 Data
+                        </label>
+                      </div>
+      
+                      <div>
+                        <input
+                          type="radio"
+                          id="option2"
+                          name="options"
+                          value={500}
+                          checked={count === 500}
+                          readOnly
+                          className="cursor-pointer mr-1"
+                          onClick={() => {
+                            setCount(500);
+                            setEnableCount(false);
+                          }}
+                        />
+                        <label htmlFor="option2" className="cursor-pointer">
+                          Last 500 Data
+                        </label>
+                      </div>
+      
+                      <div>
+                        <input
+                          type="radio"
+                          id="option3"
+                          name="options"
+                          value={1000}
+                          checked={count === 1000}
+                          readOnly
+                          className="cursor-pointer mr-1"
+                          onClick={() => {
+                            setCount(1000);
+                            setEnableCount(false);
+                          }}
+                        />
+                        <label htmlFor="option3" className="cursor-pointer">
+                          Last 1000 Data
+                        </label>
+                      </div>
+      
+                      <div>
+                        <input
+                          type="radio"
+                          id="option4"
+                          name="options"
+                          className="cursor-pointer mr-1"
+                          checked={enableCount === true}
+                          readOnly
+                          onClick={() => {
+                            setCount(0);
+                            setEnableCount(true);
+                          }}
+                        />
+                        <label htmlFor="option4" className="cursor-pointer">
+                          Custom Count
+                        </label>
+                      </div>
+      
+                      {enableCount && (
+                        <>
+                          <label htmlFor="count">Enter Count:</label>
+                          <input
+                            type="number"
+                            id="count"
+                            required
+                            value={count}
+                            className="text-black w-32 rounded-md px-2"
+                            onChange={(e) => setCount(parseInt(e.target.value) || 0)}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div className="flex gap-4">
+                      <button
+                        className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 font-medium text-white"
+                        type="submit"
+                      >
+                        <FaChartLine className="text-lg" />
+                        Plot
+                      </button>
+                    </div>
+                </form>
 
         ) : Active_status === 3 ? (
           <div className='border p-[10%] rounded-md'>
             <form
                   className="flex flex-col items-center justify-center gap-6 2xl:gap-12"
-                  onSubmit={generateAverageAnalyticsData}
-                >
-                   <div className='flex items-center gap-1 cursor-pointer' onClick={()=>setActive(0)}>
-              <span className='text-[40px]'>
-                <IoArrowBackCircle/>
-              </span>
-              <span className='text-[20px]'>
-                Back
-              </span>
-              
-            </div>
-                  <center className="text-xl 2xl:text-2xl font-medium">
-                    Select Date Range
-                  </center>
-                  <div className="flex gap-2">
-                    <div className="flex flex-col gap-4 font-medium">
-                      <div>Configuration</div>
-                      <label>From</label>
-                      <label>To</label>
+                  onSubmit={generateAverageExcel}
+                  >
+                  <div className='flex items-center gap-1 cursor-pointer' onClick={()=>setActive(0)}>
+                    <span className='text-[40px]'>
+                      <IoArrowBackCircle/>
+                    </span>
+                    <span className='text-[20px]'>
+                      Back
+                    </span>
+                  </div>
+                  <center className="text-xl font-medium">Select Date Range</center>
+                    <div className="flex gap-2">
+                      <div className="flex flex-col gap-4 font-medium">
+                        <label>From</label>
+                        <label>To</label>
+                      </div>
+                      <div className="flex flex-col gap-4">
+                        <input
+                          type="date"
+                          className="text-black rounded-md px-0.5"
+                          required
+                          value={avgFromDate}
+                          onChange={(e) => setAvgFromDate(e.target.value)}
+                        />
+                        <input
+                          type="date"
+                          className="text-black rounded-md px-0.5"
+                          required
+                          value={avgToDate}
+                          onChange={(e) => setAvgToDate(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-4">
-                    <select
-                        name="sensorConfiguration"
-                        className="text-black rounded-md p-1 text-sm 2xl:text-base"
-                        onChange={(e) =>
-                          setSelectedsensorConfig(e.target.value)
-                        }
-                        value={SelectedsensorConfig}
-                        required
+                    <div className="flex flex-col gap-2 text-sm 2xl:text-base font-medium">
+                      <div className="text-center ">Average By:</div>
+                      <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="radio"
+                            id="option2"
+                            name="averageOption"
+                            value={averageOption}
+                            defaultChecked
+                            className="cursor-pointer mt-0.5"
+                            onChange={() => setAverageOption("hour")}
+                          />
+                          <label htmlFor="option2" className="mr-2 cursor-pointer">
+                            Hour
+                          </label>
+                        </div>
+      
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="radio"
+                            id="option3"
+                            name="averageOption"
+                            value={averageOption}
+                            className="cursor-pointer mt-0.5"
+                            onChange={() => setAverageOption("day")}
+                          />
+                          <label htmlFor="option3" className="mr-2 cursor-pointer">
+                            Day
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center gap-4 font-medium">
+                      <button
+                        type="submit"
+                        className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
                       >
-                        <option value="" disabled>
-                          Select Configuration
-                          </option>
-                          <option value="sensor1">Sensor 1</option>
-                          <option value="sensor2">Sensor 2</option>
-                          <option value="sensor3">Sensor 3</option>
-                      </select>
-                      <input
-                        type="date"
-                        className="text-black rounded-md px-0.5"
-                        required
-                        // value={avgFromDate}
-                        // onChange={(e) => setAvgFromDate(e.target.value)}
-                      />
-                      <input
-                        type="date"
-                        className="text-black rounded-md px-0.5"
-                        required
-                        // value={avgToDate}
-                        // onChange={(e) => setAvgToDate(e.target.value)}
-                      />
+                        <FaChartLine className="text-lg" />
+                        Plot
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex gap-2 text-sm 2xl:text-base font-medium">
-                    <div className="text-center">Average By:</div>
-                    <div className="flex gap-2 items-center text-black">
-                      {/* <div className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          id="option1"
-                          name="averageOption"
-                          value={averageOption}
-                          defaultChecked
-                          className="cursor-pointer mt-0.5"
-                          onChange={() => setAverageOption("minute")}
-                        />
-                        <label
-                          htmlFor="option1"
-                          className="mr-2 cursor-pointer"
-                        >
-                          Minute
-                        </label>
-                      </div> */}
-
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          id="option2"
-                          name="averageOption"
-                          // value={averageOption}
-                          defaultChecked
-                          className="cursor-pointer mt-0.5"
-                          // onChange={() => setAverageOption("hour")}
-                        />
-                        <label
-                          htmlFor="option2"
-                          className="mr-2 cursor-pointer text-white"
-                        >
-                          Hour
-                        </label>
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          id="option3"
-                          name="averageOption"
-                          // value={averageOption}
-                          className="cursor-pointer mt-0.5"
-                          // onChange={() => setAverageOption("day")}
-                        />
-                        <label
-                          htmlFor="option3"
-                          className="mr-2 cursor-pointer text-white"
-                        >
-                          Day
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center gap-4 font-medium">
-                    <button
-                      className="rounded-md bg-[#e4ba4c] hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-black"
-                      type="submit"
-                    >
-                      <BiScatterChart className="text-lg" />
-                      Plot Graph
-                    </button>
-                  </div>
                 </form>
           </div>
         ) :Active_status === 4 ? (
           <div className='border p-[10%] rounded-md'>
             <form
                   className="flex flex-col gap-4 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-                  onSubmit={generateAverageAnalyticsData}
-                >
+                  onSubmit={generateAverageExcel}
+                  >
                    <div className='flex items-center gap-1 cursor-pointer' onClick={()=>setActive(0)}>
               <span className='text-[40px]'>
                 <IoArrowBackCircle/>
@@ -489,114 +531,72 @@ setActive(id);
               </span>
               
             </div>
-                  <center className="text-xl font-medium">
+                 <center className="text-xl font-medium">
                     Select Time Interval
                   </center>
                   <div className="flex gap-2">
                     <div className="flex flex-col gap-4 font-medium">
-                      <div>Configuration</div>
                       <label>From</label>
                       <label>To</label>
                     </div>
                     <div className="flex flex-col gap-4">
-                    <select
-                        name="sensorConfiguration"
-                        className="text-black rounded-md p-1 text-sm 2xl:text-base"
-                        onChange={(e) =>
-                          setSelectedsensorConfig(e.target.value)
-                        }
-                        value={SelectedsensorConfig}
-                        required
-                      >
-                        <option value="" disabled>
-                          Select Configuration
-                          </option>
-                          <option value="sensor1">Sensor 1</option>
-                          <option value="sensor2">Sensor 2</option>
-                          <option value="sensor3">Sensor 3</option>
-                      </select>
                       <input
                         type="date"
                         className="text-black rounded-md px-0.5"
                         required
-                        // value={intervalFromDate}
-                        // onChange={(e) => setIntervalFromDate(e.target.value)}
+                        value={intervalFromDate}
+                        onChange={(e) => setIntervalFromDate(e.target.value)}
                       />
+    
                       <input
                         type="date"
                         className="text-black rounded-md px-0.5"
                         required
-                        // value={intervalToDate}
-                        // onChange={(e) => setIntervalToDate(e.target.value)}
+                        value={intervalToDate}
+                        onChange={(e) => setIntervalToDate(e.target.value)}
                       />
                     </div>
                   </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="text-sm 2xl:text-base font-medium">
-                      Get 1 data for every -
-                    </div>
-                    <div className="flex gap-2 text-sm 2xl:text-base font-medium text-white">
-                      {/* <div className="flex items-center gap-1">
+                  <div className="text-sm 2xl:text-base font-medium">
+                    Get 1 data for every -
+                  </div>
+                  <div className="flex gap-2 text-sm 2xl:text-base font-medium">
+                    <div className="flex items-center gap-1">
                       <input
                         type="radio"
-                        id="intervaOption2"
+                        id="intervaOption1"
                         name="intervalOptions"
                         value={intervalOption}
                         defaultChecked
                         className="cursor-pointer mt-0.5"
-                        onChange={() => setIntervalOption("minute")}
+                        onChange={() => setIntervalOption("hour")}
                       />
-                      <label
-                        htmlFor="intervaOption2"
-                        className="cursor-pointer"
-                      >
-                        Minute
+                      <label htmlFor="intervaOption1" className="cursor-pointer">
+                        Hour
                       </label>
-                    </div> */}
-
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          id="intervaOption1"
-                          name="intervalOptions"
-                          // value={intervalOption}
-                          defaultChecked
-                          className="cursor-pointer mt-0.5"
-                          // onChange={() => setIntervalOption("hour")}
-                        />
-                        <label
-                          htmlFor="intervaOption1"
-                          className="cursor-pointer"
-                        >
-                          Hour
-                        </label>
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="radio"
-                          id="intervaOption3"
-                          name="intervalOptions"
-                          // value={intervalOption}
-                          className="cursor-pointer mt-0.5"
-                          // onChange={() => setIntervalOption("day")}
-                        />
-                        <label
-                          htmlFor="intervaOption3"
-                          className="cursor-pointer"
-                        >
-                          Day
-                        </label>
-                      </div>
+                    </div>
+    
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        id="intervaOption3"
+                        name="intervalOptions"
+                        value={intervalOption}
+                        className="cursor-pointer mt-0.5"
+                        onChange={() => setIntervalOption("day")}
+                      />
+                      <label htmlFor="intervaOption3" className="cursor-pointer">
+                        Day
+                      </label>
                     </div>
                   </div>
                   <div>
                     <button
-                      className="rounded-md bg-[#e4ba4c] hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-black font-medium"
                       type="submit"
+                      className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white font-medium"
                     >
-                      <BiScatterChart className="text-lg" />
-                      Plot Graph
+                      <FaChartLine className="text-lg" />
+                      Plot
                     </button>
                   </div>
                 </form>
@@ -638,13 +638,18 @@ setActive(id);
       </div>
       <div className='w-full md:w-[60%] h-[60%] md:h-full border border-gray-500 rounded-md'>
         <div className='h-[7%] bg-gray-500 bg-opacity-50 '>
-          col1
+          
         </div>
         <div className='h-[93%] p-2 bg-gray-400  bg-opacity-20 '>
         <Line  data={data} width={"100%"} options={options}></Line>
 
         </div>
       </div>
+      {loading && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col justify-center items-center font-semibold text-sm">
+            <div>Your report is being downloaded!</div>
+          </div>
+        )}
     </div>
   )
 }
