@@ -115,6 +115,7 @@ const Report = () => {
   };
 
   // console.log(selectedReportOption)
+  // console.log("Sensordata=",Sensordata)
   return (
     <div className="h-full space-y-2 m-2">
       <div className="h-[27%] md:h-[13%] md:flex gap-32 text-white px-10">
@@ -359,7 +360,7 @@ const Report = () => {
                   </label>
                 </div>
               </div>
-              <div>
+              <div className="flex gap-2">
               <button
                   type="button"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
@@ -555,7 +556,7 @@ const Report = () => {
           >
             {Sensordata.length === 0 ? (
               <div className="text-center text-gray-400 py-4">No data found</div>
-            ) : selectedReportOption === "averageData" || selectedReportOption === "intervalData" ? (
+            ) : selectedReportOption === "averageData" ? (
               <div>
                 <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
                   <thead className="backdrop-blur-md sticky top-0">
