@@ -572,10 +572,10 @@ const Report = () => {
                     {Sensordata.map((item, index) => (
                       <tr key={index}>
                         <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor1}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor2}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor3}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Time}</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS1}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS2}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS3}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.dateRange}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -596,11 +596,13 @@ const Report = () => {
                   <tbody>
                     {Sensordata.map((item, index) => (
                       <tr key={index}>
-                        <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS1}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS2}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS3}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.dateRange}</td>
+                            <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor1}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor2}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor3}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Time}</td>
+
+                       
                       </tr>
                     ))}
                   </tbody>
