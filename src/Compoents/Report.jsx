@@ -185,7 +185,6 @@ const Report = () => {
           </div>
           <div className="text-[17px] m-2">Average</div>
         </div>
-
         <div
           className={`basis-full border border-gray-500 flex justify-center items-center rounded-md hover:bg-orange-400 hover:scale-110 duration-200 cursor-pointer ${
             selectedReportOption === "intervalData" ? "bg-orange-400" : ""
