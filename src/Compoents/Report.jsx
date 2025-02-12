@@ -3,6 +3,7 @@ import { BsCalendar2Date } from "react-icons/bs";
 import { PiClockCountdown } from "react-icons/pi";
 import { TbAlarmAverage } from "react-icons/tb";
 import { BsSkipForwardCircle } from "react-icons/bs";
+import { FaTable } from "react-icons/fa";
 
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -23,12 +24,13 @@ const Report = () => {
   const [intervalToDate, setIntervalToDate] = useState("");
   const [intervalOption, setIntervalOption] = useState("hour");
   const [loading, setLoading] = useState(false);
-
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [Sensordata,setSensordata]=useState('')
 
-  const generateExcel = async (e) => {
+
+  const generateExcel = async (id) => {
     try {
-      e.preventDefault();
+      // e.preventDefault();
       setLoading(true);
       const response = await axios.get(`${apiUrl}/backend/getRilReport`, {
         params: {
@@ -39,29 +41,37 @@ const Report = () => {
         },
       });
       setLoading(false);
-
-      if (response.data && response.data.length > 0) {
-        const ws = XLSX.utils.json_to_sheet(response.data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-        const info = new Blob([excelBuffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        saveAs(info, `RIL_Report.xlsx`);
-      } else if (response.data && response.data.length === 0) {
-        alert("No data found");
-      }
+      if(id === 1){
+        if (response.data && response.data.length > 0) {
+          const ws = XLSX.utils.json_to_sheet(response.data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+          const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+          const info = new Blob([excelBuffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          saveAs(info, `RIL_Report.xlsx`);
+        } else if (response.data && response.data.length === 0) {
+          alert("No data found");
+        }
+      }else{
+        if (response.data && response.data.length > 0) {
+          setSensordata(response.data)
+        }else if (response.data && response.data.length === 0) {
+          alert("No data found");
+        }
+      }      
     } catch (error) {
       console.error(error);
     }
   };
 
-  const generateAverageExcel = async (e) => {
+
+  const generateAverageExcel = async (id) => {
     try {
       // console.log("before api");
 
-      e.preventDefault();
+      // e.preventDefault();
       setLoading(true);
       const response = await axios.get(
         `${apiUrl}/backend/getRilAverageReport`,
@@ -79,24 +89,32 @@ const Report = () => {
       );
       setLoading(false);
       // console.log("average response ", response.data.data);
-
-      if (response.data.data && response.data.data.length > 0) {
-        const ws = XLSX.utils.json_to_sheet(response.data.data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-        const info = new Blob([excelBuffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        saveAs(info, `RIL_Report.xlsx`);
-      } else if (response.data.data && response.data.data.length === 0) {
-        alert("No data found");
+      if(id===1){
+        if (response.data.data && response.data.data.length > 0) {
+          const ws = XLSX.utils.json_to_sheet(response.data.data);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+          const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+          const info = new Blob([excelBuffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          saveAs(info, `RIL_Report.xlsx`);
+        } else if (response.data.data && response.data.data.length === 0) {
+          alert("No data found");
+        }
+      }else{
+        if (response.data.data && response.data.data.length > 0) {
+            setSensordata(response.data.data)
+          }else if (response.data && response.data.length === 0) {
+          alert("No data found");
+        }
       }
     } catch (error) {
       console.error(error);
     }
   };
 
+  // console.log(selectedReportOption)
   return (
     <div className="h-full space-y-2 m-2">
       <div className="h-[27%] md:h-[13%] md:flex gap-32 text-white px-10">
@@ -106,6 +124,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("datePicker");
+            setSensordata("")
             setCount();
             setEnableCount(false);
             setAvgFromDate("");
@@ -127,6 +146,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("countWiseData");
+            setSensordata("")
             setFromDate("");
             setToDate("");
             setCount(100);
@@ -150,6 +170,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("averageData");
+            setSensordata("")
             setFromDate("");
             setToDate("");
             setCount();
@@ -171,6 +192,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("intervalData");
+            setSensordata("")
             setFromDate("");
             setToDate("");
             setCount();
@@ -188,13 +210,13 @@ const Report = () => {
       </div>
 
       {/* main content */}
-      <div className="h-[71%] md:h-[85%] flex justify-center items-center text-gray-200">
-        <div className="bg-gray-400/20 rounded-md px-10 py-4">
+      <div className="h-[71%] md:h-[85%] md:flex justify-center items-center text-gray-200 gap-2">
+        <div className="bg-gray-400/20 rounded-md px-10 py-4 w-[100%] md:w-[30%]">
           {/* average option */}
           {selectedReportOption === "averageData" && (
-            <form
+            <div
               className="p-8 flex flex-col items-center justify-center gap-6"
-              onSubmit={generateAverageExcel}
+              // onSubmit={generateAverageExcel}
             >
               <center className="text-xl font-medium">Select Date Range</center>
               <div className="flex gap-2">
@@ -253,22 +275,31 @@ const Report = () => {
                 </div>
               </div>
               <div className="flex justify-center gap-4 font-medium">
-                <button
-                  type="submit"
+              <button
+                  type="button"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateAverageExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
+                <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateAverageExcel(2)}
+                >
+                  <FaTable className="text-lg" />
+                  View Table
+                </button>
               </div>
-            </form>
+            </div>
           )}
 
           {/* interval option */}
           {selectedReportOption === "intervalData" && (
-            <form
+            <div
               className="flex flex-col gap-6 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-              onSubmit={generateAverageExcel}
+              // onSubmit={generateAverageExcel}
             >
               <center className="text-xl font-medium">
                 Select Time Interval
@@ -330,22 +361,31 @@ const Report = () => {
                 </div>
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white font-medium"
+              <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateAverageExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
+                <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateAverageExcel(2)}
+                >
+                  <FaTable className="text-lg" />
+                  View Table
+                </button>
               </div>
-            </form>
+            </div>
           )}
 
           {/* datepicker option */}
           {selectedReportOption === "datePicker" && (
-            <form
+            <div
               className="p-4 md:p-8 flex flex-col items-center justify-center gap-6"
-              onSubmit={generateExcel}
+              // onSubmit={generateExcel}
             >
               <center className="text-xl font-medium">Select Date Range</center>
 
@@ -369,26 +409,36 @@ const Report = () => {
                     required
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
+
                   />
                 </div>
               </div>
               <div className="flex justify-center gap-4 font-medium">
                 <button
-                  type="submit"
+                  type="button"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
+                <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateExcel(2)}
+                >
+                  <FaTable className="text-lg" />
+                  View Table
+                </button>
               </div>
-            </form>
+            </div>
           )}
 
           {/* countwise option */}
           {selectedReportOption === "countWiseData" && (
             <form
               className="flex flex-col gap-4 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-              onSubmit={generateExcel}
+              // onSubmit={generateExcel}
             >
               <center className="text-xl font-medium">Select Count</center>
               <div className="flex flex-col gap-2 md:gap-4">
@@ -466,7 +516,6 @@ const Report = () => {
                     Custom Count
                   </label>
                 </div>
-
                 {enableCount && (
                   <>
                     <label htmlFor="count">Enter Count:</label>
@@ -482,17 +531,84 @@ const Report = () => {
                 )}
               </div>
               <div className="flex gap-4">
-                <button
-                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 font-medium text-white"
-                  type="submit"
+              <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
+                </button>
+                <button
+                  type="button"
+                  className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
+                  onClick={()=>generateExcel(2)}
+                >
+                  <FaTable className="text-lg" />
+                  View Table
                 </button>
               </div>
             </form>
           )}
         </div>
+        <div
+            className="w-[100%] mt-2 md:mt-0 md:w-[70%] border h-[65%] md:h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+          >
+            {Sensordata.length === 0 ? (
+              <div className="text-center text-gray-400 py-4">No data found</div>
+            ) : selectedReportOption === "averageData" || selectedReportOption === "intervalData" ? (
+              <div>
+                <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
+                  <thead className="backdrop-blur-md sticky top-0">
+                    <tr>
+                      <th className="border border-gray-500 px-2 py-1">S.No</th>
+                      <th className="border border-gray-500 px-2 py-1">S1</th>
+                      <th className="border border-gray-500 px-2 py-1">S2</th>
+                      <th className="border border-gray-500 px-2 py-1">S3</th>
+                      <th className="border border-gray-500 px-2 py-1">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Sensordata.map((item, index) => (
+                      <tr key={index}>
+                        <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor1}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor2}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Sensor3}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.Time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
+                  <thead className="backdrop-blur-md sticky top-0">
+                    <tr>
+                      <th className="border border-gray-500 px-2 py-1">S.No</th>
+                      <th className="border border-gray-500 px-2 py-1">Average-S1</th>
+                      <th className="border border-gray-500 px-2 py-1">Average-S2</th>
+                      <th className="border border-gray-500 px-2 py-1">Average-S3</th>
+                      <th className="border border-gray-500 px-2 py-1">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Sensordata.map((item, index) => (
+                      <tr key={index}>
+                        <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS1}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS2}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.avgS3}℃</td>
+                        <td className="border border-gray-500 px-2 py-1">{item.dateRange}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
         {loading && (
           <div className="absolute inset-0 bg-black/70 flex flex-col justify-center items-center font-semibold text-sm">
             <div>Your report is being downloaded!</div>

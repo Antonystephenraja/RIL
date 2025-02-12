@@ -89,9 +89,9 @@ const Analytics = () => {
 
 
 const colors = [
-  { bg: "#ff9e00" },
-  { bg: "#d492fc" },
-  { bg: "#00e9fc" },
+  { bg: "#04f5b7" },
+  { bg: "#d77806" },
+  { bg: "#cedb02" },
   { bg: "#fbff00" },
 ];
 
@@ -102,34 +102,35 @@ const data = {
           label: "Sensor 1",
           data: sensor1Data.reverse(),
           backgroundColor: "#04f5b7",
-
-          borderColor: colors[0].border,
-          fill: true,
+          borderColor: colors[0].bg,
+          fill: false,
+          pointRadius: 0,
+          pointHoverRadius: 2,
           tension: 0.2,
-          borderWidth: 2,
-          hidden: false, 
+          borderWidth: 3,
+          // hidden: false, 
       },
       {
           label: "Sensor 2",
           data: sensor2Data.reverse(),
           backgroundColor: "#d77806",
-
-          borderColor: colors[1].border,
-          fill: true,
+          borderColor: colors[1].bg,
+          fill: false,
+          pointRadius: 0,
           tension: 0.2,
-          borderWidth: 2,
-          hidden: true, 
+          borderWidth: 3,
+          // hidden: true, 
       },
       {
           label: "Sensor 3",
           data: sensor3Data.reverse(),
           backgroundColor: "#cedb02",
-
-          borderColor: colors[2].border,
-          fill: true,
+          borderColor: colors[2].bg,
+          fill: false,
+          pointRadius: 0,
           tension: 0.2,
-          borderWidth: 2,
-          hidden: true,
+          borderWidth: 3,
+          // hidden: true,
       },
   ],
 };

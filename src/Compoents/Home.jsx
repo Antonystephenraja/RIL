@@ -47,7 +47,6 @@ const Home = () => {
   const [MaxValue, setMaxValue] = useState("");
   const Sensor_status = Sensordata.activityStatus;
 
-  console.log("sensor data ---->", Sensordata);
   // console.log("s1 ->", Sensordata.Sensor1[0]);
 
   const [DataLimit, setDeviceLimit] = useState(() => {
@@ -521,8 +520,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="h-[450px] md:h-[50%] gap-2 space-y-2 md:space-y-0">
-        <div className="w-full   md:w-[100%] h-[60%]  md:h-full border border-gray-500 rounded-md">
+      <div className="h-[500px] md:h-[50%] gap-2 space-y-2 md:space-y-0">
+        <div className="w-full   md:w-[100%] h-[90%]  md:h-full border border-gray-500 rounded-md">
           <div className="h-[10%] bg-gray-500 bg-opacity-70 flex justify-between items-center">
             <span className="m-2">Live Trend</span>
             <div className="flex">
