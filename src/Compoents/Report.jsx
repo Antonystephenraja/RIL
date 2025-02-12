@@ -25,8 +25,7 @@ const Report = () => {
   const [intervalOption, setIntervalOption] = useState("hour");
   const [loading, setLoading] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [Sensordata,setSensordata]=useState('')
-
+  const [Sensordata, setSensordata] = useState("");
 
   const generateExcel = async (id) => {
     try {
@@ -41,12 +40,15 @@ const Report = () => {
         },
       });
       setLoading(false);
-      if(id === 1){
+      if (id === 1) {
         if (response.data && response.data.length > 0) {
           const ws = XLSX.utils.json_to_sheet(response.data);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-          const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+          const excelBuffer = XLSX.write(wb, {
+            bookType: "xlsx",
+            type: "array",
+          });
           const info = new Blob([excelBuffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           });
@@ -54,18 +56,17 @@ const Report = () => {
         } else if (response.data && response.data.length === 0) {
           alert("No data found");
         }
-      }else{
+      } else {
         if (response.data && response.data.length > 0) {
-          setSensordata(response.data)
-        }else if (response.data && response.data.length === 0) {
+          setSensordata(response.data);
+        } else if (response.data && response.data.length === 0) {
           alert("No data found");
         }
-      }      
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const generateAverageExcel = async (id) => {
     try {
@@ -89,12 +90,15 @@ const Report = () => {
       );
       setLoading(false);
       // console.log("average response ", response.data.data);
-      if(id===1){
+      if (id === 1) {
         if (response.data.data && response.data.data.length > 0) {
           const ws = XLSX.utils.json_to_sheet(response.data.data);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-          const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+          const excelBuffer = XLSX.write(wb, {
+            bookType: "xlsx",
+            type: "array",
+          });
           const info = new Blob([excelBuffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           });
@@ -102,10 +106,10 @@ const Report = () => {
         } else if (response.data.data && response.data.data.length === 0) {
           alert("No data found");
         }
-      }else{
+      } else {
         if (response.data.data && response.data.data.length > 0) {
-            setSensordata(response.data.data)
-          }else if (response.data && response.data.length === 0) {
+          setSensordata(response.data.data);
+        } else if (response.data && response.data.length === 0) {
           alert("No data found");
         }
       }
@@ -125,7 +129,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("datePicker");
-            setSensordata("")
+            setSensordata("");
             setCount();
             setEnableCount(false);
             setAvgFromDate("");
@@ -147,7 +151,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("countWiseData");
-            setSensordata("")
+            setSensordata("");
             setFromDate("");
             setToDate("");
             setCount(100);
@@ -171,7 +175,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("averageData");
-            setSensordata("")
+            setSensordata("");
             setFromDate("");
             setToDate("");
             setCount();
@@ -192,7 +196,7 @@ const Report = () => {
           }`}
           onClick={() => {
             setSelectedReportOption("intervalData");
-            setSensordata("")
+            setSensordata("");
             setFromDate("");
             setToDate("");
             setCount();
@@ -214,9 +218,17 @@ const Report = () => {
         <div className="bg-gray-400/20 rounded-md px-10 py-4 w-[100%] md:w-[30%]">
           {/* average option */}
           {selectedReportOption === "averageData" && (
-            <div
+            <form
               className="p-8 flex flex-col items-center justify-center gap-6"
-              // onSubmit={generateAverageExcel}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const actionType = e.nativeEvent.submitter.name; // Get button name
+                if (actionType === "excel") {
+                  generateAverageExcel(1);
+                } else if (actionType === "table") {
+                  generateAverageExcel(2);
+                }
+              }}
             >
               <center className="text-xl font-medium">Select Date Range</center>
               <div className="flex gap-2">
@@ -275,31 +287,41 @@ const Report = () => {
                 </div>
               </div>
               <div className="flex justify-center gap-4 font-medium">
-              <button
-                  type="button"
+                <button
+                  type="submit"
+                  name="excel"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateAverageExcel(1)}
+                  // onClick={()=>generateAverageExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
                 <button
-                  type="button"
+                  type="submit"
+                  name="table"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateAverageExcel(2)}
+                  // onClick={()=>generateAverageExcel(2)}
                 >
                   <FaTable className="text-lg" />
                   View Table
                 </button>
               </div>
-            </div>
+            </form>
           )}
 
           {/* interval option */}
           {selectedReportOption === "intervalData" && (
-            <div
+            <form
               className="flex flex-col gap-6 py-4 md:py-8 px-5 md:px-10 items-center justify-center"
-              // onSubmit={generateAverageExcel}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const actionType = e.nativeEvent.submitter.name;
+                if (actionType === "excel") {
+                  generateAverageExcel(1);
+                } else if (actionType === "table") {
+                  generateAverageExcel(2);
+                }
+              }}
             >
               <center className="text-xl font-medium">
                 Select Time Interval
@@ -361,31 +383,41 @@ const Report = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-              <button
-                  type="button"
+                <button
+                  type="submit"
+                  name="excel"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateAverageExcel(1)}
+                  // onClick={() => generateAverageExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
                 <button
-                  type="button"
+                  type="submit"
+                  name="table"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateAverageExcel(2)}
+                  // onClick={() => generateAverageExcel(2)}
                 >
                   <FaTable className="text-lg" />
                   View Table
                 </button>
               </div>
-            </div>
+            </form>
           )}
 
           {/* datepicker option */}
           {selectedReportOption === "datePicker" && (
-            <div
+            <form
               className="p-4 md:p-8 flex flex-col items-center justify-center gap-6"
-              // onSubmit={generateExcel}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const actionType = e.nativeEvent.submitter.name; // Get button name
+                if (actionType === "excel") {
+                  generateExcel(1);
+                } else if (actionType === "table") {
+                  generateExcel(2);
+                }
+              }}
             >
               <center className="text-xl font-medium">Select Date Range</center>
 
@@ -409,29 +441,30 @@ const Report = () => {
                     required
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
-
                   />
                 </div>
               </div>
               <div className="flex justify-center gap-4 font-medium">
                 <button
-                  type="button"
+                  type="submit"
+                  name="excel"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateExcel(1)}
+                  // onClick={() => generateExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
                 </button>
                 <button
-                  type="button"
+                  type="submit"
+                  name="table"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateExcel(2)}
+                  // onClick={() => generateExcel(2)}
                 >
                   <FaTable className="text-lg" />
                   View Table
                 </button>
               </div>
-            </div>
+            </form>
           )}
 
           {/* countwise option */}
@@ -531,10 +564,10 @@ const Report = () => {
                 )}
               </div>
               <div className="flex gap-4">
-              <button
+                <button
                   type="button"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateExcel(1)}
+                  onClick={() => generateExcel(1)}
                 >
                   <FaFileDownload className="text-lg" />
                   Download Excel
@@ -542,7 +575,7 @@ const Report = () => {
                 <button
                   type="button"
                   className="rounded-md bg-orange-400 hover:scale-110 duration-200 py-1 px-2 2xl:py-2 2xl:px-4 flex items-center gap-1 text-white"
-                  onClick={()=>generateExcel(2)}
+                  onClick={() => generateExcel(2)}
                 >
                   <FaTable className="text-lg" />
                   View Table
@@ -551,65 +584,87 @@ const Report = () => {
             </form>
           )}
         </div>
-        <div
-            className="w-[100%] mt-2 md:mt-0 md:w-[70%] border h-[65%] md:h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
-          >
-            {Sensordata.length === 0 ? (
-              <div className="text-center text-gray-400 py-4">No data found</div>
-            ) : selectedReportOption === "averageData" ? (
-              <div>
-                <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
-                  <thead className="backdrop-blur-md sticky top-0">
-                    <tr>
-                      <th className="border border-gray-500 px-2 py-1">S.No</th>
-                      <th className="border border-gray-500 px-2 py-1">S1</th>
-                      <th className="border border-gray-500 px-2 py-1">S2</th>
-                      <th className="border border-gray-500 px-2 py-1">S3</th>
-                      <th className="border border-gray-500 px-2 py-1">Time</th>
+        <div className="w-[100%] mt-2 md:mt-0 md:w-[70%] border h-[65%] md:h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent">
+          {Sensordata.length === 0 ? (
+            <div className="text-center text-gray-400 py-4">No data found</div>
+          ) : selectedReportOption === "averageData" ? (
+            <div>
+              <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
+                <thead className="backdrop-blur-md sticky top-0">
+                  <tr>
+                    <th className="border border-gray-500 px-2 py-1">S.No</th>
+                    <th className="border border-gray-500 px-2 py-1">S1</th>
+                    <th className="border border-gray-500 px-2 py-1">S2</th>
+                    <th className="border border-gray-500 px-2 py-1">S3</th>
+                    <th className="border border-gray-500 px-2 py-1">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Sensordata.map((item, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.avgS1}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.avgS2}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.avgS3}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.dateRange}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {Sensordata.map((item, index) => (
-                      <tr key={index}>
-                        <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS1}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS2}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.avgS3}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.dateRange}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div>
-                <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
-                  <thead className="backdrop-blur-md sticky top-0">
-                    <tr>
-                      <th className="border border-gray-500 px-2 py-1">S.No</th>
-                      <th className="border border-gray-500 px-2 py-1">Average-S1</th>
-                      <th className="border border-gray-500 px-2 py-1">Average-S2</th>
-                      <th className="border border-gray-500 px-2 py-1">Average-S3</th>
-                      <th className="border border-gray-500 px-2 py-1">Time</th>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div>
+              <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
+                <thead className="backdrop-blur-md sticky top-0">
+                  <tr>
+                    <th className="border border-gray-500 px-2 py-1">S.No</th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S1
+                    </th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S2
+                    </th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S3
+                    </th>
+                    <th className="border border-gray-500 px-2 py-1">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Sensordata.map((item, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.Sensor1}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.Sensor2}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.Sensor3}℃
+                      </td>
+                      <td className="border border-gray-500 px-2 py-1">
+                        {item.Time}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {Sensordata.map((item, index) => (
-                      <tr key={index}>
-                            <td className="border border-gray-500 px-2 py-1">{index + 1}</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor1}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor2}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Sensor3}℃</td>
-                        <td className="border border-gray-500 px-2 py-1">{item.Time}</td>
-
-                       
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
 
         {loading && (
           <div className="absolute inset-0 bg-black/70 flex flex-col justify-center items-center font-semibold text-sm">
