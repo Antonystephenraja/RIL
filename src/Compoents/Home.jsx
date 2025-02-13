@@ -45,6 +45,8 @@ const Home = () => {
   const { Sensordata, terminalOutput, setTerminalOutput } = useAlldata();
   const [Minvalue, setMinValue] = useState("");
   const [MaxValue, setMaxValue] = useState("");
+  const [selectedSensor, setSelectedSensor] = useState(null); 
+
   const Sensor_status = Sensordata.activityStatus;
 
   // console.log("s1 ->", Sensordata.Sensor1[0]);
@@ -100,22 +102,64 @@ const Home = () => {
     parseInt(Sensor_Limits.MaxLimit) < parseInt(Active_Last_Value.Sensor3) &&
       `Sensor3 has exceeded the maximum Temperature at  ${Active_Last_Value.Time}.`,
   ].filter(Boolean);
+  const sensorDataList = [Sensor1, Sensor2, Sensor3];
 
-  const data = {
-    labels: [...Timestamp].reverse(),
-    datasets: [Sensor1, Sensor2, Sensor3].map((sensorData, index) => ({
-      label: `Sensor ${index + 1}`,
-      data: [...sensorData].reverse(),
-      borderColor: colors[index].bg,
-      backgroundColor: "rgba(54, 162, 235, 0.5)",
-      pointRadius: 0,
-      pointHoverRadius: 2,
-      fill: false,
-      tension: 0.2,
-      borderWidth: 3,
-      // hidden: index > 0,
-    })),
-  };
+  // const data = {
+  //   labels: [...Timestamp].reverse(),
+  //   datasets: [Sensor1, Sensor2, Sensor3].map((sensorData, index) => ({
+  //     label: `Sensor ${index + 1}`,
+  //     data: [...sensorData].reverse(),
+  //     borderColor: colors[index].bg,
+  //     backgroundColor: "rgba(54, 162, 235, 0.5)",
+  //     pointRadius: 0,
+  //     pointHoverRadius: 2,
+  //     fill: false,
+  //     tension: 0.2,
+  //     borderWidth: 3,
+  //     // hidden: index > 0,
+  //   })),
+  // };
+
+  const isNoData = [Sensor1, Sensor2, Sensor1].every(
+    (sensor) => !sensor || sensor.length === 0 || sensor.every((val) => val === "N/A")
+  );
+
+
+  const datasets =
+  selectedSensor === null
+    ? sensorDataList.map((sensorData, index) => ({
+        label: `Sensor ${index + 1}`,
+        data: [...sensorData].reverse(),
+        borderColor: colors[index].bg,
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        pointRadius: 0,
+        pointHoverRadius: 2,
+        fill: false,
+        tension: 0.2,
+        borderWidth: 3,
+      }))
+    : [
+        {
+          label: `Sensor ${selectedSensor + 1}`,
+          data: [...sensorDataList[selectedSensor]].reverse(),
+          borderColor: colors[selectedSensor].bg,
+          backgroundColor: "rgba(54, 162, 235, 0.5)",
+          pointRadius: 0,
+          pointHoverRadius: 2,
+          fill: false,
+          tension: 0.2,
+          borderWidth: 3,
+        },
+      ];
+
+const data = {
+  labels: [...Timestamp].reverse(),
+  datasets: datasets,
+};
+
+
+
+
 
   let Minimium_Limits;
   let Maximium_Limits;
@@ -138,7 +182,7 @@ const Home = () => {
       // width: 500,
       plugins: {
         legend: {
-          display: true,
+          display: false,
           labels: {
             color: "white",
           },
@@ -610,9 +654,39 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="h-[90%] bg-gray-400 bg-opacity-30">
-            <Line data={data} height={"20%"} width={"100"} options={options} />
-          </div>
+          <div className="h-[85%] bg-gray-400 bg-opacity-30">
+              <div className="flex gap-4 justify-center items-center text-[10px] md:text-[15px]">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="sensor"
+                    checked={selectedSensor === null}
+                    onChange={() => setSelectedSensor(null)}
+                  />
+                  Show All
+                </label>
+
+                {sensorDataList.map((_, index) => (
+                  <label key={index} className="flex items-center gap-2 ">
+                    <input
+                      type="radio"
+                      name="sensor"
+                      value={index}
+                      checked={selectedSensor === index}
+                      onChange={() => setSelectedSensor(index)}
+                    />
+                    Sensor {index + 1}
+                  </label>
+                ))}
+            </div>
+            {isNoData ?(
+              <div className="text-center text-white text-lg font-bold mt-6">
+                No data found!!
+              </div>
+              ):(
+                <Line data={data} height={"20%"} width={"100"} options={options} />
+              )}
+            </div>
         </div>
       </div>
     </div>

@@ -38,8 +38,7 @@ const Analytics = () => {
   const [Active_status, setActive] = useState();
   const [count, setCount] = useState();
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [selectedSensor, setSelectedSensor] = useState(null); // Null = Show all
   const [avgFromDate, setAvgFromDate] = useState("");
   const [avgToDate, setAvgToDate] = useState("");
   const [averageOption, setAverageOption] = useState("hour");
@@ -113,7 +112,6 @@ const Analytics = () => {
         : [];
   }
 
-  console.log("sensor1Data=", Sensordatas, "status=", Active_status);
 
   const colors = [
     { bg: "#04f5b7" },
@@ -122,51 +120,41 @@ const Analytics = () => {
     { bg: "#fbff00" },
   ];
 
-  const data = {
-    labels: timestamp.reverse(),
-    datasets: [
-      {
-        label: "Sensor 1",
-        data: sensor1Data.reverse(),
-        backgroundColor: "#04f5b7",
-        borderColor: colors[0].bg,
-        fill: false,
-        pointRadius: 0,
-        pointHoverRadius: 2,
-        tension: 0.2,
-        borderWidth: 3,
-        // hidden: false,
-      },
-      {
-        label: "Sensor 2",
-        data: sensor2Data.reverse(),
-        backgroundColor: "#d77806",
-        borderColor: colors[1].bg,
-        fill: false,
-        pointRadius: 0,
-        tension: 0.2,
-        borderWidth: 3,
-        // hidden: true,
-      },
-      {
-        label: "Sensor 3",
-        data: sensor3Data.reverse(),
-        backgroundColor: "#cedb02",
-        borderColor: colors[2].bg,
-        fill: false,
-        pointRadius: 0,
-        tension: 0.2,
-        borderWidth: 3,
-        // hidden: true,
-      },
-    ],
-  };
+  const isNoData = [sensor1Data, sensor2Data, sensor3Data].every(
+    (sensor) => !sensor || sensor.length === 0 || sensor.every((val) => val === "N/A")
+  );
+   const datasets = selectedSensor === null
+   ? [
+       { label: "Sensor 1", data: [...sensor1Data].reverse(), borderColor: colors[0].bg },
+       { label: "Sensor 2", data: [...sensor2Data].reverse(), borderColor: colors[1].bg },
+       { label: "Sensor 3", data: [...sensor3Data].reverse(), borderColor: colors[2].bg },
+     ]
+   : [
+       {
+         label: `Sensor ${selectedSensor + 1}`,
+         data: [...[sensor1Data, sensor2Data, sensor3Data][selectedSensor]].reverse(),
+         borderColor: colors[selectedSensor].bg,
+       },
+     ];
+
+ const data = {
+   labels: [...timestamp].reverse(),
+   datasets: datasets.map((sensor, index) => ({
+     ...sensor,
+     fill: false,
+     pointRadius: 0,
+     pointHoverRadius: 2,
+     tension: 0.2,
+     borderWidth: 3,
+     backgroundColor: sensor.borderColor,
+   })),
+ };
 
   const options = {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
+        display: false,
         labels: {
           color: "white", // Color of legend labels
         },
@@ -763,7 +751,39 @@ const Analytics = () => {
       <div className="w-full md:w-[60%] h-[60%] md:h-full border border-gray-500 rounded-md">
         <div className="h-[7%] bg-gray-500 bg-opacity-50 "></div>
         <div className="h-[93%] p-2 bg-gray-400  bg-opacity-20 ">
-          <Line data={data} width={"100%"} options={options}></Line>
+          <div className="flex gap-4 justify-center items-center text-white">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="sensor"
+                checked={selectedSensor === null}
+                onChange={() => setSelectedSensor(null)}
+                className="w-4 h-4"
+              />
+              <span className="text-white">Show All</span>
+            </label>
+
+            {[sensor1Data, sensor2Data, sensor3Data].map((_, index) => (
+              <label key={index} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="sensor"
+                  value={index}
+                  checked={selectedSensor === index}
+                  onChange={() => setSelectedSensor(index)}
+                  className="w-4 h-4"
+                />
+                <span style={{ color: colors[index].bg }}>{`Sensor ${index + 1}`}</span>
+              </label>
+            ))}
+          </div>
+          {isNoData ? (
+            <div className="text-center text-white text-lg font-bold mt-6">
+              No data found! Please select an option to view the trend.
+            </div>
+            ) : (
+              <Line data={data} width={"100%"} options={options}></Line>
+            )}
         </div>
       </div>
       {loading && (

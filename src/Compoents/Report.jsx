@@ -118,8 +118,8 @@ const Report = () => {
     }
   };
 
-  // console.log(selectedReportOption)
-  // console.log("Sensordata=",Sensordata)
+  console.log(selectedReportOption)
+  console.log("Sensordata=",Sensordata)
   return (
     <div className="h-full space-y-2 m-2">
       <div className="h-[27%] md:h-[13%] md:flex gap-32 text-white px-10">
@@ -591,13 +591,19 @@ const Report = () => {
             <div>
               <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
                 <thead className="backdrop-blur-md sticky top-0">
-                  <tr>
+                <tr>
                     <th className="border border-gray-500 px-2 py-1">S.No</th>
-                    <th className="border border-gray-500 px-2 py-1">S1</th>
-                    <th className="border border-gray-500 px-2 py-1">S2</th>
-                    <th className="border border-gray-500 px-2 py-1">S3</th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S1
+                    </th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S2
+                    </th>
+                    <th className="border border-gray-500 px-2 py-1">
+                      Average-S3
+                    </th>
                     <th className="border border-gray-500 px-2 py-1">Time</th>
-                  </tr>
+                  </tr> 
                 </thead>
                 <tbody>
                   {Sensordata.map((item, index) => (
@@ -627,18 +633,12 @@ const Report = () => {
               <table className="min-w-full table-auto border-collapse text-xs text-gray-200">
                 <thead className="backdrop-blur-md sticky top-0">
                   <tr>
-                    <th className="border border-gray-500 px-2 py-1">S.No</th>
-                    <th className="border border-gray-500 px-2 py-1">
-                      Average-S1
-                    </th>
-                    <th className="border border-gray-500 px-2 py-1">
-                      Average-S2
-                    </th>
-                    <th className="border border-gray-500 px-2 py-1">
-                      Average-S3
-                    </th>
-                    <th className="border border-gray-500 px-2 py-1">Time</th>
-                  </tr>
+                      <th className="border border-gray-500 px-2 py-1">S.No</th>
+                      <th className="border border-gray-500 px-2 py-1">S1</th>
+                      <th className="border border-gray-500 px-2 py-1">S2</th>
+                      <th className="border border-gray-500 px-2 py-1">S3</th>
+                      <th className="border border-gray-500 px-2 py-1">Time</th>
+                    </tr>
                 </thead>
                 <tbody>
                   {Sensordata.map((item, index) => (
