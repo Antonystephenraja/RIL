@@ -18,7 +18,7 @@ const Initial_Route = () => {
             <Route path="/" element={<Home />} />
             <Route path="/Report" element={<Report />} />
             <Route path="/Analysis" element={<Analytics />} />
-            <Route path="/Settings" element={<Mainpage />} />
+            <Route path="/Settings" element={<Settings />} />
             {/* <Route path="/Settings" element={<PdfReport/>} /> */}
           </Route>
         </Routes>
