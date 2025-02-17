@@ -157,7 +157,27 @@ const data = {
   datasets: datasets,
 };
 
-
+const gridHoverLine = {
+  id: "gridHoverLine",
+  beforeDraw(chart) {
+    const { ctx, chartArea } = chart;
+    if (!chart._active || chart._active.length === 0) return;
+    const mouseEvent = chart.tooltip;
+    const x = mouseEvent.caretX;
+    const y = chart._lastEvent?.y ?? mouseEvent.caretY;
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(x, chartArea.top);
+    ctx.lineTo(x, chartArea.bottom);
+    ctx.moveTo(chartArea.left, y);
+    ctx.lineTo(chartArea.right, y);
+    ctx.stroke();
+    ctx.restore();
+  },
+};
+ChartJS.register(gridHoverLine);
 
 
 
@@ -230,12 +250,18 @@ const data = {
         },
         zoom: {
           pan: {
-            enabled: true,
+            enabled: false,
             mode: "xy",
           },
           zoom: {
             wheel: {
               enabled: true,
+            },
+            drag: {
+              enabled: true,
+              backgroundColor: "rgba(202, 232, 211, 0.6)",
+              borderColor: "white",
+              borderWidth: 1,
             },
             pinch: {
               enabled: true,
@@ -243,6 +269,10 @@ const data = {
             mode: "xy",
           },
         },
+      },
+      interaction: {
+        mode: "index",
+        intersect: false,
       },
       scales: {
         y: {

@@ -4,7 +4,6 @@ import { PiClockCountdown } from "react-icons/pi";
 import { TbAlarmAverage } from "react-icons/tb";
 import { BsSkipForwardCircle } from "react-icons/bs";
 import { Line } from "react-chartjs-2";
-import { BiScatterChart } from "react-icons/bi";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -18,10 +17,8 @@ import {
   Filler,
 } from "chart.js";
 import { FaChartLine } from "react-icons/fa6";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-dropdown/style.css";
-import { useAlldata } from "../AppRouteing/DataWrapping";
 import { IoArrowBackCircle } from "react-icons/io5";
 // Register required Chart.js components
 ChartJS.register(
@@ -137,7 +134,29 @@ const Analytics = () => {
        },
      ];
 
- const data = {
+const gridHoverLine = {
+  id: "gridHoverLine",
+  beforeDraw(chart) {
+    const { ctx, chartArea } = chart;
+    if (!chart._active || chart._active.length === 0) return;
+    const mouseEvent = chart.tooltip;
+    const x = mouseEvent.caretX;
+    const y = chart._lastEvent?.y ?? mouseEvent.caretY;
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(x, chartArea.top);
+    ctx.lineTo(x, chartArea.bottom);
+    ctx.moveTo(chartArea.left, y);
+    ctx.lineTo(chartArea.right, y);
+    ctx.stroke();
+    ctx.restore();
+  },
+};
+ChartJS.register(gridHoverLine);
+
+const data = {
    labels: [...timestamp].reverse(),
    datasets: datasets.map((sensor, index) => ({
      ...sensor,
@@ -168,12 +187,18 @@ const Analytics = () => {
       },
       zoom: {
         pan: {
-          enabled: true,
+          enabled: false,
           mode: "xy", // Allow panning in both x and y directions
         },
         zoom: {
           wheel: {
             enabled: true, // Zoom using the mouse wheel
+          },
+          drag: {
+            enabled: true,
+            backgroundColor: "rgba(202, 232, 211, 0.6)",
+            borderColor: "white",
+            borderWidth: 1,
           },
           pinch: {
             enabled: true, // Zoom using pinch gestures
@@ -181,6 +206,10 @@ const Analytics = () => {
           mode: "xy", // Allow zooming in both x and y directions
         },
       },
+    },
+    interaction: {
+      mode: "index",
+      intersect: false,
     },
     scales: {
       y: {

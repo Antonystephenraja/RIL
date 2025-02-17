@@ -5,20 +5,23 @@ import { useNavigate } from "react-router-dom";
 import utmaps from "../Assets/uTMAPS_1.55__1_-removebg-preview.png";
 
 const Login = () => {
-  const [Username, setUsername] = useState("");
+  const [UserName, setUsername] = useState("");
   const [Password, setPassword] = useState("");
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const handleLoginFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://ril.xyma.live/backend/login", {
+      const response = await fetch(`${apiUrl}/backend/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Username, Password }),
+        body: JSON.stringify({ UserName, Password }),
       });
       const data = await response.json();
+      console.log("worng mail id=",data)
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("Limit", 100);
@@ -70,7 +73,7 @@ const Login = () => {
               <input
                 id="userId"
                 type="text"
-                value={Username}
+                value={UserName}
                 onChange={(e) => setUsername(e.target.value)}
                 className="h-10 px-4 rounded-md border border-gray-500 bg-gray-300 bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />

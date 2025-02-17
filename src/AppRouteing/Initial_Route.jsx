@@ -6,6 +6,7 @@ import Home from "../Compoents/Home";
 import Analytics from "../Compoents/Analytics";
 import Settings from "../Compoents/Settings";
 import { AlldataProvider } from "./DataWrapping";
+import Mainpage from "../ADMIN/Mainpage";
 
 const Initial_Route = () => {
   return (
@@ -17,7 +18,8 @@ const Initial_Route = () => {
             <Route path="/" element={<Home />} />
             <Route path="/Report" element={<Report />} />
             <Route path="/Analysis" element={<Analytics />} />
-            <Route path="/Settings" element={<Settings />} />
+            <Route path="/Settings" element={<Mainpage />} />
+            {/* <Route path="/Settings" element={<PdfReport/>} /> */}
           </Route>
         </Routes>
       </AlldataProvider>
