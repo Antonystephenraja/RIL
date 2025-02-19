@@ -1,13 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect,useRef,useMemo, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { TbTemperatureSun } from "react-icons/tb";
 import zoomPlugin from "chartjs-plugin-zoom";
-
+import { IoIosInformationCircle } from "react-icons/io";
 import { FaTemperatureArrowDown } from "react-icons/fa6";
 import { FaTemperatureArrowUp } from "react-icons/fa6";
 import { IoWarning } from "react-icons/io5";
 import "../Css/Home.css";
+import { TbDelta } from "react-icons/tb";
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import {
   Chart as ChartJS,
   registerables,
@@ -46,9 +49,13 @@ const Home = () => {
   const [Minvalue, setMinValue] = useState("");
   const [MaxValue, setMaxValue] = useState("");
   const [selectedSensor, setSelectedSensor] = useState(null); 
+  const chartref =useRef(null);
 
-  const Sensor_status = Sensordata.activityStatus;
+  const Sensor_Delta = Sensordata.Delta;
 
+  const current_Delta = Sensor_Delta && Sensor_Delta[0]?Sensor_Delta[0].CurrentDelta:0;
+  const Recuried_Delta =Sensor_Delta && Sensor_Delta[0]?Sensor_Delta[0]:0;
+  console.log("senosrdata=",Recuried_Delta)
   // console.log("s1 ->", Sensordata.Sensor1[0]);
 
   const [DataLimit, setDeviceLimit] = useState(() => {
@@ -326,6 +333,11 @@ ChartJS.register(gridHoverLine);
   const limit_button = (id) => {
     localStorage.setItem("Limit", id + "hr");
     setDeviceLimit(id);
+    if (chartref.current) {
+      chartref.current.resetZoom();
+    } else {
+      console.warn("Chart reference is null, resetZoom() cannot be called.");
+    }
   };
 
   const limit = (id) => {
@@ -401,6 +413,29 @@ ChartJS.register(gridHoverLine);
                     {Active_Last_Value.Sensor1}℃
                   </span>
                 </div>
+                <div className="flex justify-end gap-2 mr-2">
+                  <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
+                    <div className="flex items-center justify-center">
+                    <IoIosInformationCircle
+                      className="mr-2 text-white text-opacity-90 cursor-pointer"
+                      data-tooltip-id="info-tooltip"
+                    />
+                    
+                    {/* Tooltip content */}
+                    <ReactTooltip id="info-tooltip" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
+                    Average Δ: {Recuried_Delta.Temp1_R_Delta}/Hour, Current Δ: {current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}/Min
+                    </ReactTooltip>                      
+                    <span>A</span> 
+                      <TbDelta/>
+                      <span>: {Recuried_Delta.Temp1_R_Delta}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <span>C</span>
+                      <TbDelta/>
+                      <span>:{current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="border bg-gray-400 bg-opacity-30 border-gray-500 w-[50%] rounded-md">
                 <span className="ml-1 flex justify-center 2xl:text-[150%]">
@@ -413,6 +448,29 @@ ChartJS.register(gridHoverLine);
                   <span className="text-2xl font-bold   2xl:text-4xl">
                     {Active_Last_Value.Sensor2} ℃
                   </span>
+                </div>
+                <div className="flex justify-end gap-2 mr-2">
+                  <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
+                    <div className="flex items-center justify-center">
+                    <IoIosInformationCircle
+                      className="mr-2 text-white text-opacity-90 cursor-pointer"
+                      data-tooltip-id="info-tooltip"
+                    />
+                    
+                    {/* Tooltip content */}
+                    <ReactTooltip id="info-tooltip" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
+                    Average Δ: {Recuried_Delta.Temp2_R_Delta}/Hour, Current Δ: {current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}/Min
+                    </ReactTooltip>                       
+                    <span>A</span> 
+                      <TbDelta/>
+                      <span>: {Recuried_Delta.Temp2_R_Delta}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <span>C</span>
+                      <TbDelta/>
+                      <span>:{current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -428,6 +486,29 @@ ChartJS.register(gridHoverLine);
                   <span className="text-2xl font-bold  2xl:text-4xl">
                     {Active_Last_Value.Sensor3} ℃
                   </span>
+                </div>
+                <div className="flex justify-end gap-2 mr-2">
+
+                  <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
+
+                    <div className="flex items-center justify-center">
+                    <IoIosInformationCircle
+                      className="mr-2 text-white text-opacity-90 cursor-pointer"
+                      data-tooltip-id="info-tooltip"
+                    />
+                    <ReactTooltip id="info-tooltip"place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}} >
+                      Average Δ: {Recuried_Delta.Temp3_R_Delta}/Hour, Current Δ: {current_Delta.Sensor3Difference?.toFixed(2) || "N/A"}/Min
+                    </ReactTooltip> 
+                    <span>A</span> 
+                      <TbDelta/>
+                      <span>: {Recuried_Delta.Temp3_R_Delta}</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <span>C</span>
+                      <TbDelta/>
+                      <span>:{current_Delta.Sensor3Difference?.toFixed(2) || "N/A"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div
@@ -714,7 +795,10 @@ ChartJS.register(gridHoverLine);
                 No data found!!
               </div>
               ):(
-                <Line data={data} height={"20%"} width={"100"} options={options} />
+                <Line  ref={(el) => {
+                  chartref.current = el?.chartInstance || el;
+                }}
+                data={data} height={"20%"} width={"100"} options={options} />
               )}
             </div>
         </div>
