@@ -63,12 +63,12 @@ const Home_Model = () => {
         {Sensor_status === "active" ? (
           <span className="border  p-1 rounded-md border-gray-400 bg-green-400 text-black text-[10px] 2xl:text-[15px] m-1 flex gap-1 items-center">
             <TbDeviceDesktopCheck />
-            Active
+            Online
           </span>
         ) : (
           <span className="border p-1 rounded-md border-gray-400 h-[10%]  bg-red-400 text-black text-[10px] 2xl:text-[15px] m-1 flex gap-1 items-center">
             <TbDeviceDesktopCancel />
-            Inactive
+            Offline
           </span>
         )}
       </div>
