@@ -26,6 +26,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("Limit", 100);
         localStorage.setItem("Limit", "1hr");
+        localStorage.setItem("UserRole",data.userRole);
         // navigate('/');
         window.location.href = "/";
       } else {

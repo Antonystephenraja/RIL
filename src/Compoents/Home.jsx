@@ -55,7 +55,7 @@ const Home = () => {
 
   const current_Delta = Sensor_Delta && Sensor_Delta[0]?Sensor_Delta[0].CurrentDelta:0;
   const Recuried_Delta =Sensor_Delta && Sensor_Delta[0]?Sensor_Delta[0]:0;
-  console.log("senosrdata=",Recuried_Delta)
+  // console.log("senosrdata=",Recuried_Delta)
   // console.log("s1 ->", Sensordata.Sensor1[0]);
 
   const [DataLimit, setDeviceLimit] = useState(() => {
@@ -407,23 +407,23 @@ ChartJS.register(gridHoverLine);
                 </span>
                 <div className="flex justify-center items-center gap-2 mt-3">
                   <span>
-                    <TbTemperatureSun className="text-6xl 2xl:text-8xl text-gray-300" />
+                    <TbTemperatureSun className="text-[30px] md:text-6xl 2xl:text-8xl text-gray-300" />
                   </span>
                   <span className="text-2xl 2xl:text-4xl font-bold ">
                     {Active_Last_Value.Sensor1}℃
                   </span>
                 </div>
-                <div className="flex justify-end gap-2 mr-2">
+                <div className="flex justify-end gap-2 mr-2 mt-2 md:mt-0">
                   <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
                     <div className="flex items-center justify-center">
                     <IoIosInformationCircle
                       className="mr-2 text-white text-opacity-90 cursor-pointer"
-                      data-tooltip-id="info-tooltip"
+                      data-tooltip-id="info-tooltip1"
                     />
                     
                     {/* Tooltip content */}
-                    <ReactTooltip id="info-tooltip" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
-                    Average Δ: {Recuried_Delta.Temp1_R_Delta}/Hour, Current Δ: {current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}/Min
+                    <ReactTooltip id="info-tooltip1" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
+                      Average Δ: {Recuried_Delta.Temp1_R_Delta}/Hour, Current Δ: {current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}/Min
                     </ReactTooltip>                      
                     <span>A</span> 
                       <TbDelta/>
@@ -443,23 +443,23 @@ ChartJS.register(gridHoverLine);
                 </span>
                 <div className="flex justify-center items-center gap-2 mt-3">
                   <span>
-                    <TbTemperatureSun className="text-6xl 2xl:text-8xl text-gray-300" />
+                    <TbTemperatureSun className="text-[30px] md:text-6xl 2xl:text-8xl text-gray-300" />
                   </span>
                   <span className="text-2xl font-bold   2xl:text-4xl">
                     {Active_Last_Value.Sensor2} ℃
                   </span>
                 </div>
-                <div className="flex justify-end gap-2 mr-2">
+                <div className="flex justify-end gap-2 mr-2 mt-2 md:mt-0">
                   <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
                     <div className="flex items-center justify-center">
                     <IoIosInformationCircle
                       className="mr-2 text-white text-opacity-90 cursor-pointer"
-                      data-tooltip-id="info-tooltip"
+                      data-tooltip-id="info-tooltip2"
                     />
                     
                     {/* Tooltip content */}
-                    <ReactTooltip id="info-tooltip" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
-                    Average Δ: {Recuried_Delta.Temp2_R_Delta}/Hour, Current Δ: {current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}/Min
+                    <ReactTooltip id="info-tooltip2" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
+                      Average Δ: {Recuried_Delta.Temp2_R_Delta}/Hour, Current Δ: {current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}/Min
                     </ReactTooltip>                       
                     <span>A</span> 
                       <TbDelta/>
@@ -481,22 +481,22 @@ ChartJS.register(gridHoverLine);
                 </span>
                 <div className="flex justify-center items-center gap-2 mt-3">
                   <span>
-                    <TbTemperatureSun className="text-6xl 2xl:text-8xl text-gray-300" />
+                    <TbTemperatureSun className="text-[30px] md:text-6xl 2xl:text-8xl text-gray-300" />
                   </span>
                   <span className="text-2xl font-bold  2xl:text-4xl">
                     {Active_Last_Value.Sensor3} ℃
                   </span>
                 </div>
-                <div className="flex justify-end gap-2 mr-2">
+                <div className="flex justify-end gap-2 mr-2 mt-2 md:mt-0">
 
                   <div className="flex border border-gray-300 gap-2 border-opacity-60 text-[10px] 2xl:text-[12px] rounded-md p-[0.5%] hover:cursor-pointer">
 
                     <div className="flex items-center justify-center">
                     <IoIosInformationCircle
                       className="mr-2 text-white text-opacity-90 cursor-pointer"
-                      data-tooltip-id="info-tooltip"
+                      data-tooltip-id="info-tooltip3"
                     />
-                    <ReactTooltip id="info-tooltip"place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}} >
+                    <ReactTooltip id="info-tooltip3"place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}} >
                       Average Δ: {Recuried_Delta.Temp3_R_Delta}/Hour, Current Δ: {current_Delta.Sensor3Difference?.toFixed(2) || "N/A"}/Min
                     </ReactTooltip> 
                     <span>A</span> 
@@ -678,7 +678,7 @@ ChartJS.register(gridHoverLine);
       <div className="h-[500px] md:h-[50%] gap-2 space-y-2 md:space-y-0">
         <div className="w-full   md:w-[100%] h-[90%]  md:h-full border border-gray-500 rounded-md">
           <div className="h-[10%] bg-gray-500 bg-opacity-70 flex justify-between items-center">
-            <span className="m-2">Live Trend</span>
+            <span className="m-2 text-[10px] md:text-[15px]">Live Trend</span>
             <div className="flex">
               <span className="text-[10px] md:text-[19px] 2xl:text-[18px]">
                 S1:
