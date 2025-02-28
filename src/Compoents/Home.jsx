@@ -423,16 +423,19 @@ ChartJS.register(gridHoverLine);
                     
                     {/* Tooltip content */}
                     <ReactTooltip id="info-tooltip1" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
-                      Average Δ: {Recuried_Delta.Temp1_R_Delta}/Hour, Current Δ: {current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}/Min
+                    Average Δ: {Recuried_Delta.Temp1_R_Delta ? `${Recuried_Delta.Temp1_R_Delta}℃` : "N/A"}/Hour, 
+                    Current Δ: {current_Delta.Sensor1Difference 
+                      ? `${current_Delta.Sensor1Difference.toFixed(2)}℃` 
+                      : "N/A"}/Min
                     </ReactTooltip>                      
                     <span>A</span> 
                       <TbDelta/>
-                      <span>: {Recuried_Delta.Temp1_R_Delta}</span>
+                      <span>: {Recuried_Delta.Temp1_R_Delta?.toFixed(2) ? `${Recuried_Delta.Temp1_R_Delta}℃` : "N/A"}</span>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>C</span>
                       <TbDelta/>
-                      <span>:{current_Delta.Sensor1Difference?.toFixed(2) || "N/A"}</span>
+                      <span>:{current_Delta.Sensor1Difference?.toFixed(2)? `${current_Delta.Sensor1Difference?.toFixed(2) }℃`:"N/A"}</span>
                     </div>
                   </div>
                 </div>
@@ -456,19 +459,22 @@ ChartJS.register(gridHoverLine);
                       className="mr-2 text-white text-opacity-90 cursor-pointer"
                       data-tooltip-id="info-tooltip2"
                     />
-                    
                     {/* Tooltip content */}
                     <ReactTooltip id="info-tooltip2" place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}}>
-                      Average Δ: {Recuried_Delta.Temp2_R_Delta}/Hour, Current Δ: {current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}/Min
+                    Average Δ: {Recuried_Delta.Temp2_R_Delta ? `${Recuried_Delta.Temp2_R_Delta}℃` : "N/A"}/Hour, 
+                    Current Δ: {current_Delta.Sensor2Difference 
+                      ? `${current_Delta.Sensor2Difference.toFixed(2)}℃` 
+                      : "N/A"}/Min
+
                     </ReactTooltip>                       
                     <span>A</span> 
                       <TbDelta/>
-                      <span>: {Recuried_Delta.Temp2_R_Delta}</span>
+                      <span>: {Recuried_Delta.Temp2_R_Delta?.toFixed(2) ? `${Recuried_Delta.Temp2_R_Delta}℃` : "N/A"}</span>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>C</span>
                       <TbDelta/>
-                      <span>:{current_Delta.Sensor2Difference?.toFixed(2) || "N/A"}</span>
+                      <span>:{current_Delta.Sensor2Difference?.toFixed(2)? `${current_Delta.Sensor2Difference?.toFixed(2) }℃`:"N/A"}</span>
                     </div>
                   </div>
                 </div>
@@ -497,16 +503,20 @@ ChartJS.register(gridHoverLine);
                       data-tooltip-id="info-tooltip3"
                     />
                     <ReactTooltip id="info-tooltip3"place="top" effect="solid" style={{ backgroundColor: 'rgb(209 213 219)', color: '#000'}} >
-                      Average Δ: {Recuried_Delta.Temp3_R_Delta}/Hour, Current Δ: {current_Delta.Sensor3Difference?.toFixed(2) || "N/A"}/Min
+                    Average Δ: {Recuried_Delta.Temp3_R_Delta ? `${Recuried_Delta.Temp3_R_Delta}℃` : "N/A"}/Hour, 
+                    Current Δ: {current_Delta.Sensor3Difference 
+                      ? `${current_Delta.Sensor3Difference.toFixed(2)}℃` 
+                      : "N/A"}/Min
+
                     </ReactTooltip> 
                     <span>A</span> 
                       <TbDelta/>
-                      <span>: {Recuried_Delta.Temp3_R_Delta}</span>
+                      <span>: {Recuried_Delta.Temp3_R_Delta?.toFixed(2) ? `${Recuried_Delta.Temp3_R_Delta}℃` : "N/A"}</span>
                     </div>
                     <div className="flex items-center justify-center">
                       <span>C</span>
                       <TbDelta/>
-                      <span>:{current_Delta.Sensor3Difference?.toFixed(2) || "N/A"}</span>
+                      <span>:{current_Delta.Sensor3Difference?.toFixed(2)? `${current_Delta.Sensor3Difference?.toFixed(2) }℃`:"N/A"}</span>
                     </div>
                   </div>
                 </div>
@@ -766,19 +776,20 @@ ChartJS.register(gridHoverLine);
           </div>
 
           <div className="h-[85%] bg-gray-400 bg-opacity-30">
-              <div className="flex gap-4 justify-center items-center text-[10px] md:text-[15px]">
-                <label className="flex items-center gap-2">
+                <div className="flex gap-4 justify-center items-center text-[10px] md:text-[15px]">
+                  <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="sensor"
                     checked={selectedSensor === null}
                     onChange={() => setSelectedSensor(null)}
+                    className="w-4 h-4"
                   />
-                  Show All
+                  <span className="text-white">Show All</span>
                 </label>
 
                 {sensorDataList.map((_, index) => (
-                  <label key={index} className="flex items-center gap-2 ">
+                  <label key={index} className="flex items-center gap-2 " style={{ borderColor: colors[index].bg,color: colors[index].bg  }}>
                     <input
                       type="radio"
                       name="sensor"

@@ -47,13 +47,19 @@ const Analytics = () => {
   const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [Sensordatas, setSensorData] = useState("");
-
+  const [infostatus,setStatus]=useState(true)
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  const width_value = "50"
   let sensor1Data = [];
   let sensor2Data = [];
   let sensor3Data = [];
   let timestamp = [];
 
+
+  const backbutton =()=>{
+    setStatus(true);
+  }
   if (Active_status === 1 || Active_status === 2 || Active_status === 4) {
     sensor1Data =
       Sensordatas && Array.isArray(Sensordatas)
@@ -111,9 +117,9 @@ const Analytics = () => {
 
 
   const colors = [
-    { bg: "#04f5b7" },
-    { bg: "#d77806" },
-    { bg: "#cedb02" },
+    { bg: "#ff9e00" },
+    { bg: "#d492fc" },
+    { bg: "#00e9fc" },
     { bg: "#fbff00" },
   ];
 
@@ -258,6 +264,7 @@ const data = {
 
   const generateAverageExcel = async (e) => {
     try {
+      setStatus(false)
       e.preventDefault();
       setLoading(true);
       const response = await axios.get(
@@ -277,7 +284,6 @@ const data = {
       setLoading(false);
       if (response.data) {
         const datas = response.data.data;
-
         setSensorData(datas);
       } else if (response.data && response.data.length === 0) {
         alert("No data found");
@@ -288,6 +294,8 @@ const data = {
   };
   const generateExcel = async (e) => {
     try {
+      console.log("yess")
+      setStatus(false)
       e.preventDefault();
       setLoading(true);
       const response = await axios.get(`${apiUrl}/backend/getRilReport`, {
@@ -311,7 +319,9 @@ const data = {
 
   return (
     <div className=" w-full text-white h-full md:flex gap-2 ">
-      <div className="w-full h-[30%] md:h-full md:w-[40%] rounded-md flex justify-center items-center">
+      { infostatus === true ?
+      (
+        <div className="w-full h-[30%] md:h-full md:w-[40%] rounded-md flex justify-center items-center">
         {Active_status === 1 ? (
           <div className="space-y-4 border border-gray-400 p-[10%] rounded-md">
             <form
@@ -777,8 +787,25 @@ const data = {
           </div>
         )}
       </div>
-      <div className="w-full md:w-[60%] h-[60%] md:h-full border border-gray-500 rounded-md">
-        <div className="h-[7%] bg-gray-500 bg-opacity-50 "></div>
+      ):(<div>
+
+        </div>)
+    }
+      
+
+      <div className={`${infostatus === false ? "w-full md:w-[100%]": "w-full md:w-[60%]"} h-[60%] md:h-full border border-gray-500 rounded-md`}>
+        <div className="h-[7%] bg-gray-500 bg-opacity-50 flex items-center text-[20px] p-2 gap-1 cursor-pointer" onClick={backbutton}>
+          {
+            infostatus === false ? (
+              <div className="flex">
+              <IoArrowBackCircle className="text-[30px]"/> <span className="text-[15px] mt-1">Back</span>
+
+              </div>
+            ):(
+              <div></div>
+            )
+          }
+        </div>
         <div className="h-[93%] p-2 bg-gray-400  bg-opacity-20 ">
           <div className="flex gap-4 justify-center items-center text-white">
             <label className="flex items-center gap-2 cursor-pointer">
