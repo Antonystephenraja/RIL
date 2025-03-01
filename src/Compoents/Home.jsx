@@ -426,7 +426,7 @@ ChartJS.register(gridHoverLine);
                     Average Δ: {Recuried_Delta.Temp1_R_Delta ? `${Recuried_Delta.Temp1_R_Delta}℃` : "N/A"}/Hour, 
                     Current Δ: {current_Delta.Sensor1Difference 
                       ? `${current_Delta.Sensor1Difference.toFixed(2)}℃` 
-                      : "N/A"}/Min
+                      : "N/A"}/Hour
                     </ReactTooltip>                      
                     <span>A</span> 
                       <TbDelta/>
@@ -464,7 +464,7 @@ ChartJS.register(gridHoverLine);
                     Average Δ: {Recuried_Delta.Temp2_R_Delta ? `${Recuried_Delta.Temp2_R_Delta}℃` : "N/A"}/Hour, 
                     Current Δ: {current_Delta.Sensor2Difference 
                       ? `${current_Delta.Sensor2Difference.toFixed(2)}℃` 
-                      : "N/A"}/Min
+                      : "N/A"}/Hour
 
                     </ReactTooltip>                       
                     <span>A</span> 
@@ -506,7 +506,7 @@ ChartJS.register(gridHoverLine);
                     Average Δ: {Recuried_Delta.Temp3_R_Delta ? `${Recuried_Delta.Temp3_R_Delta}℃` : "N/A"}/Hour, 
                     Current Δ: {current_Delta.Sensor3Difference 
                       ? `${current_Delta.Sensor3Difference.toFixed(2)}℃` 
-                      : "N/A"}/Min
+                      : "N/A"}/Hour
 
                     </ReactTooltip> 
                     <span>A</span> 
